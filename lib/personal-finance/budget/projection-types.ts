@@ -41,6 +41,7 @@ export type MonthlyBudgetProjectionScenario = {
   totalAllocatedMinor: bigint;
   unallocatedMinor: bigint;
   undifferentiatedMinor: bigint;
+  smallExpensesAnnualMinor?: bigint;
 };
 
 export type AccumulatedBudgetProjectionCategory = {
@@ -66,6 +67,7 @@ export type BudgetProjectionResult = {
   totalAllocatedMinor: bigint;
   unallocatedMinor: bigint;
   undifferentiatedMinor: bigint;
+  smallExpenseRoundingAdjustmentMinor?: bigint;
 };
 
 export type ExactBudgetProjectionDifference = {

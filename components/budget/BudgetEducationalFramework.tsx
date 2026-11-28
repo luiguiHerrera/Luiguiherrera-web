@@ -1,4 +1,6 @@
 import Link from "next/link";
+import styles from "./BudgetEditorial.module.css";
+import { budgetCompositionColors } from "./BudgetComposition";
 import { budgetTargetCopy } from "@/components/budget/budget-target-copy";
 import {
   allocationCategories,
@@ -124,7 +126,7 @@ export function BudgetEducationalFramework({ locale }: { locale: BudgetLocale })
   return (
     <section
       aria-labelledby="budget-target-context-title"
-      className="mt-8 rounded-[6px] border border-line bg-panel p-5 shadow-[0_12px_32px_rgba(11,52,54,0.035)] md:p-6"
+      className="mt-8 border-t border-line pt-7"
     >
       <p className="text-xs font-semibold uppercase tracking-[0.18em] text-petrol">
         {locale === "es" ? "Marco educativo" : "Educational framework"}
@@ -135,19 +137,15 @@ export function BudgetEducationalFramework({ locale }: { locale: BudgetLocale })
       <p className="mt-3 max-w-4xl text-sm leading-6 text-muted">{labels.intro}</p>
 
       <div className="mt-6 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-        {allocationCategories.map((category) => {
+        {allocationCategories.map((category, index) => {
           const categoryLabels = targetLabels.categories[category];
           return (
-            <details className="group min-w-0 border border-line bg-white/60 p-4 open:bg-white" key={category}>
+            <details className={`group ${styles.frameworkCard}`} key={category} style={{ borderTopColor: budgetCompositionColors[index] }}>
               <summary className={summaryClassName}>
                 <h3 className="font-semibold leading-6 text-ink">{categoryLabels.name}</h3>
                 <p className="mt-2 text-sm leading-5 text-muted">{labels.categoryFunctions[category]}</p>
                 <span className="mt-3 flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.08em] text-petrol">
-                  <span aria-hidden="true" className="flex items-end gap-0.5">
-                    <span className="h-1.5 w-2 bg-petrol/35" />
-                    <span className="h-2.5 w-2 bg-petrol/60" />
-                    <span className="h-3.5 w-2 bg-petrol" />
-                  </span>
+                  <span aria-hidden="true" className="h-2 w-2 rounded-full" style={{ backgroundColor: budgetCompositionColors[index] }} />
                   {labels.categorySignals[category]}
                 </span>
                 <span className="mt-4 inline-flex min-h-10 items-center text-sm font-semibold text-petrol underline-offset-4 group-open:hidden">
@@ -210,10 +208,10 @@ export function BudgetEducationalFramework({ locale }: { locale: BudgetLocale })
         </article>
       </div>
 
-      <article className="mt-5 border border-line bg-white/55 p-4 md:p-5">
-        <h3 className="text-base font-semibold text-ink">{labels.rule.title}</h3>
-        <p className="mt-3 text-sm leading-6 text-muted">{labels.rule.detail}</p>
-      </article>
+      <details className={`mt-5 ${styles.ledgerDisclosure}`}>
+        <summary className="cursor-pointer font-semibold text-petrol">{labels.rule.title}</summary>
+        <p className="mt-2 text-sm leading-6 text-muted">{labels.rule.detail}</p>
+      </details>
 
       <div className="mt-5 border-l-2 border-petrol bg-panelSoft px-4 py-3 text-sm leading-6 text-muted">
         <p>{labels.neutral}</p>

@@ -2,7 +2,7 @@ export type BudgetHighlightKind = "deficit" | "fully-allocated" | "unallocated";
 
 export type BudgetResult = {
   coverageMonths: number | null;
-  emergencyFundMinor: number;
+  emergencyFundMinor: number | null;
   essentialsAndDebtMinor: number;
   highlightAmountMinor: number;
   highlightKind: BudgetHighlightKind;
@@ -10,5 +10,6 @@ export type BudgetResult = {
   monthlyIncomeMinor: number;
   monthlyNonMonthlyMinor: number;
   monthlySmallExpensesMinor: number;
+  smallExpensesAnnualMinor: bigint;
   totalAssignedMinor: number;
 };

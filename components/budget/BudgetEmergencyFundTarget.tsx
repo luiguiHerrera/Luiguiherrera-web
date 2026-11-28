@@ -263,6 +263,13 @@ export function BudgetEmergencyFundTarget({
           </label>
         ) : null}
 
+        {projection.status === "unknown-balance" ? (
+          <p className="mt-4 text-sm leading-6 text-muted">
+            {locale === "es"
+              ? "Saldo del fondo sin informar. La cobertura, el faltante y el aporte mensual no se pueden calcular."
+              : "Fund balance not provided. Coverage, shortfall and monthly contribution cannot be calculated."}
+          </p>
+        ) : null}
         {projection.status === "zero-base" ? <p className="mt-4 text-sm leading-6 text-muted">{labels.zeroBase}</p> : null}
         {projection.status === "rangeError" ? <p className="mt-4 text-sm text-red-800">{locale === "es" ? "El objetivo supera el rango calculable." : "The target exceeds the calculable range."}</p> : null}
         {projection.status === "calculated" ? (

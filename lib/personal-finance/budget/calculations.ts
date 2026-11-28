@@ -25,11 +25,20 @@ export function monthlyNonMonthlyAmount(expense: NonMonthlyExpense) {
   return assertSafeMinor(expense.amountMinor / frequencyMonths(expense));
 }
 
+function annualSmallExpenseAmount(expense: SmallExpense) {
+  const amount = BigInt(assertSafeMinor(expense.amountMinor));
+  if (expense.frequency === "daily") return amount * 365n;
+  if (expense.frequency === "weekly") return amount * 52n;
+  if (expense.frequency === "monthly") return amount * 12n;
+  return amount * 12n * BigInt(Math.max(0, expense.timesPerMonth));
+}
+
+function monthlyAmountFromAnnual(annualMinor: bigint) {
+  return assertSafeMinor(Number((annualMinor + 6n) / 12n));
+}
+
 export function monthlySmallExpenseAmount(expense: SmallExpense) {
-  if (expense.frequency === "daily") return assertSafeMinor(expense.amountMinor * 30);
-  if (expense.frequency === "weekly") return assertSafeMinor(expense.amountMinor * (52 / 12));
-  if (expense.frequency === "monthly") return assertSafeMinor(expense.amountMinor);
-  return assertSafeMinor(expense.amountMinor * Math.max(0, expense.timesPerMonth));
+  return monthlyAmountFromAnnual(annualSmallExpenseAmount(expense));
 }
 
 function safeSum(values: number[]) {
@@ -38,7 +47,11 @@ function safeSum(values: number[]) {
 
 export function calculateBudget(input: BudgetInput): BudgetResult {
   const monthlyNonMonthlyMinor = safeSum(input.nonMonthlyExpenses.map(monthlyNonMonthlyAmount));
-  const monthlySmallExpensesMinor = safeSum(input.smallExpenses.map(monthlySmallExpenseAmount));
+  const smallExpensesAnnualMinor = input.smallExpenses.reduce(
+    (total, expense) => total + annualSmallExpenseAmount(expense),
+    0n,
+  );
+  const monthlySmallExpensesMinor = monthlyAmountFromAnnual(smallExpensesAnnualMinor);
   const essentialsAndDebtMinor = safeSum([input.essentialsMinor, input.debtPaymentsMinor]);
   const totalAssignedMinor = safeSum([
     essentialsAndDebtMinor,
@@ -50,7 +63,7 @@ export function calculateBudget(input: BudgetInput): BudgetResult {
     monthlySmallExpensesMinor,
   ]);
   const marginMinor = assertSafeMinor(input.monthlyIncomeMinor - totalAssignedMinor);
-  const coverageMonths = essentialsAndDebtMinor > 0
+  const coverageMonths = input.emergencyFundMinor !== null && essentialsAndDebtMinor > 0
     ? input.emergencyFundMinor / essentialsAndDebtMinor
     : null;
   const highlightKind = marginMinor < 0
@@ -69,6 +82,7 @@ export function calculateBudget(input: BudgetInput): BudgetResult {
     monthlyIncomeMinor: input.monthlyIncomeMinor,
     monthlyNonMonthlyMinor,
     monthlySmallExpensesMinor,
+    smallExpensesAnnualMinor,
     totalAssignedMinor,
   };
 }

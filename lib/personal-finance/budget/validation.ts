@@ -56,7 +56,7 @@ export function parseLocalizedMoney(
 }
 
 export function formatMoneyInput(
-  minorUnits: number,
+  minorUnits: number | bigint,
   locale: BudgetLocale,
   currency: BudgetCurrency,
 ) {
@@ -66,7 +66,7 @@ export function formatMoneyInput(
 }
 
 export function formatMoney(
-  minorUnits: number,
+  minorUnits: number | bigint,
   locale: BudgetLocale,
   currency: BudgetCurrency,
 ) {
@@ -78,12 +78,12 @@ export function formatMoney(
 }
 
 function formatMinorUnits(
-  minorUnits: number,
+  minorUnits: number | bigint,
   locale: BudgetLocale,
   currency: BudgetCurrency,
   options: Intl.NumberFormatOptions,
 ) {
-  if (!Number.isSafeInteger(minorUnits)) {
+  if (typeof minorUnits === "number" && !Number.isSafeInteger(minorUnits)) {
     throw new RangeError("minorUnits must be a safe integer");
   }
 

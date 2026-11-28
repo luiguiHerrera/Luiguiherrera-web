@@ -46,7 +46,8 @@ export const EDUCATIONAL_50_10_ALLOCATION: Readonly<TargetAllocation> = Object.f
 export type CurrentBudgetProjectionSource = {
   allocation: CurrentAllocationMap;
   currency: BudgetCurrency;
-  result: Pick<BudgetResult, "monthlyIncomeMinor" | "totalAssignedMinor">;
+  result: Pick<BudgetResult, "monthlyIncomeMinor" | "totalAssignedMinor">
+    & Partial<Pick<BudgetResult, "smallExpensesAnnualMinor">>;
 };
 
 function assertNonNegativeBigInt(
@@ -338,6 +339,13 @@ function assertValidMonthlyBudgetProjectionScenario(
     "Projection scenario monthly income",
   );
   assertValidProjectionValues(scenario, scenario.monthlyIncomeMinor, "scenario");
+  if (scenario.smallExpensesAnnualMinor !== undefined) {
+    assertNonNegativeBigInt(scenario.smallExpensesAnnualMinor, "Annual small expenses");
+    if (scenario.scenarioId !== "current"
+      || (scenario.smallExpensesAnnualMinor + 6n) / 12n > scenario.undifferentiatedMinor) {
+      throw projectionInvariantError("scenario", "small expenses must be part of current undifferentiated spending");
+    }
+  }
 }
 
 function assertAccumulatedMultiple(
@@ -376,15 +384,14 @@ function assertValidBudgetProjectionResult(result: BudgetProjectionResult) {
   for (const category of result.categories) {
     assertAccumulatedMultiple(category.amountMinor, multiplier, "category amount");
   }
-  assertAccumulatedMultiple(result.totalAllocatedMinor, multiplier, "total allocated");
+  const adjustment = result.smallExpenseRoundingAdjustmentMinor ?? 0n;
+  if (adjustment !== 0n && (result.scenarioId !== "current"
+    || adjustment < -multiplier / 2n || adjustment > multiplier / 2n)) {
+    throw projectionInvariantError("result", "invalid small expense rounding adjustment");
+  }
+  assertAccumulatedMultiple(result.totalAllocatedMinor - adjustment, multiplier, "total allocated");
   assertAccumulatedMultiple(result.comparableTotalMinor, multiplier, "comparable total");
-  assertAccumulatedMultiple(
-    result.undifferentiatedMinor,
-    multiplier,
-    "undifferentiated amount",
-  );
-  assertAccumulatedMultiple(result.unallocatedMinor, multiplier, "unallocated amount");
-  assertAccumulatedMultiple(result.excessMinor, multiplier, "excess amount");
+  assertAccumulatedMultiple(result.undifferentiatedMinor - adjustment, multiplier, "undifferentiated amount");
 }
 
 function targetComparisonKnowledge(
@@ -464,6 +471,7 @@ export function buildCurrentBudgetProjectionScenario({
     knowledgeStatus,
     monthlyIncomeMinor: incomeMinor,
     scenarioId: "current",
+    smallExpensesAnnualMinor: result.smallExpensesAnnualMinor,
     totalAllocatedMinor,
     unallocatedMinor: incomeMinor > totalAllocatedMinor
       ? incomeMinor - totalAllocatedMinor
@@ -571,27 +579,37 @@ export function projectBudgetScenario(
   }
   assertValidMonthlyBudgetProjectionScenario(scenario);
   const multiplier = BigInt(horizonMonths);
+  const annualSmallExpenses = scenario.smallExpensesAnnualMinor ?? 0n;
+  // Accumulate the annual cadence before rounding, instead of multiplying a rounded monthly display.
+  const adjustment = (annualSmallExpenses * multiplier + 6n) / 12n
+    - ((annualSmallExpenses + 6n) / 12n) * multiplier;
+  const accumulatedIncomeMinor = scenario.monthlyIncomeMinor * multiplier;
+  const totalAllocatedMinor = scenario.totalAllocatedMinor * multiplier + adjustment;
+  const undifferentiatedMinor = scenario.undifferentiatedMinor * multiplier + adjustment;
   const result: BudgetProjectionResult = {
-    allocatedBasisPoints: scenario.allocatedBasisPoints,
-    accumulatedIncomeMinor: scenario.monthlyIncomeMinor * multiplier,
-    allocationStatus: scenario.allocationStatus,
+    allocatedBasisPoints: adjustment === 0n
+      ? scenario.allocatedBasisPoints
+      : totalBasisPoints(totalAllocatedMinor, accumulatedIncomeMinor),
+    accumulatedIncomeMinor,
+    allocationStatus: allocationStatus(totalAllocatedMinor, accumulatedIncomeMinor),
     categories: scenario.categories.map((category) => ({
       ...category,
-      amountMinor: category.amountMinor === null
-        ? null
-        : category.amountMinor * multiplier,
+      amountMinor: category.amountMinor === null ? null : category.amountMinor * multiplier,
     })),
     comparableTotalMinor: scenario.comparableTotalMinor * multiplier,
     comparisonKnowledge: cloneComparisonKnowledge(scenario.comparisonKnowledge),
     currency: scenario.currency,
-    excessMinor: scenario.excessMinor * multiplier,
+    excessMinor: totalAllocatedMinor > accumulatedIncomeMinor ? totalAllocatedMinor - accumulatedIncomeMinor : 0n,
     horizonMonths,
-    knowledgeStatus: scenario.knowledgeStatus,
+    knowledgeStatus: undifferentiatedMinor > 0n
+      || scenario.categories.some((category) => category.knowledgeStatus !== "known")
+      ? "partial" : "complete",
     monthlyIncomeMinor: scenario.monthlyIncomeMinor,
     scenarioId: scenario.scenarioId,
-    totalAllocatedMinor: scenario.totalAllocatedMinor * multiplier,
-    unallocatedMinor: scenario.unallocatedMinor * multiplier,
-    undifferentiatedMinor: scenario.undifferentiatedMinor * multiplier,
+    ...(adjustment !== 0n ? { smallExpenseRoundingAdjustmentMinor: adjustment } : {}),
+    totalAllocatedMinor,
+    unallocatedMinor: accumulatedIncomeMinor > totalAllocatedMinor ? accumulatedIncomeMinor - totalAllocatedMinor : 0n,
+    undifferentiatedMinor,
   };
   assertValidBudgetProjectionResult(result);
   return result;

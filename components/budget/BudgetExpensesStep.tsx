@@ -1,5 +1,6 @@
 "use client";
 
+import styles from "./BudgetEditorial.module.css";
 import type { ChangeEvent, FocusEvent } from "react";
 import {
   BudgetMoneyField,
@@ -129,7 +130,6 @@ export function BudgetExpensesStep({
     { help: labels.basicExpensesHelp, key: "essentials", label: labels.basicExpenses },
     { key: "debtPayments", label: labels.debt },
     { key: "savingInvestment", label: labels.savingInvestment },
-    { key: "emergencyFund", label: labels.emergencyFund },
   ];
   const optionalFields: Array<{ key: MainExpenseKey; label: string }> = [
     { key: "enjoyment", label: labels.enjoyment },
@@ -139,7 +139,9 @@ export function BudgetExpensesStep({
 
   return (
     <div className="mt-6 grid min-w-0 gap-6">
-      <div className="grid min-w-0 gap-4 md:grid-cols-2">
+      <div>
+        <h3 className={styles.eyebrow}>{locale === "es" ? "Flujos mensuales" : "Monthly cash flows"}</h3>
+        <div className={styles.ledger}>
         {mainFields.map((field) => {
           const handlers = onMainField(field.key);
           const fieldId = `budget-${field.key}`;
@@ -159,10 +161,29 @@ export function BudgetExpensesStep({
             </div>
           );
         })}
+        </div>
+      </div>
+      <div className={styles.stock}>
+        <p className={styles.eyebrow}>{locale === "es" ? "Saldo acumulado" : "Accumulated balance"}</p>
+        <div className="mt-3">
+          <BudgetMoneyField
+            describedBy="budget-emergencyFund-help"
+            draft={mainDrafts.emergencyFund}
+            error={errors["budget-emergencyFund"] ?? null}
+            id="budget-emergencyFund"
+            label={labels.emergencyFund}
+            {...onMainField("emergencyFund")}
+          />
+          <p className="mt-2 text-sm leading-6 text-muted" id="budget-emergencyFund-help">
+            {locale === "es"
+              ? "Indica cuánto tienes reservado hoy. Si declaras 0, la cobertura será de cero meses siempre que haya gastos básicos o deuda mínima. Puedes dejarlo vacío."
+              : "Enter how much you have set aside today. If you enter 0, coverage is zero months when essential expenses or minimum debt payments are positive. You can leave it blank."}
+          </p>
+        </div>
       </div>
 
       <details
-        className="min-w-0 rounded-[6px] border border-line bg-white/60 p-4"
+        className={styles.ledgerDisclosure}
         open={optionalFields.some((field) => Boolean(errors[`budget-${field.key}`])) || undefined}
       >
         <summary className="cursor-pointer text-sm font-semibold text-petrol">{labels.optionalDetails}</summary>
@@ -186,11 +207,14 @@ export function BudgetExpensesStep({
       </details>
 
       <details
-        className="min-w-0 rounded-[6px] border border-line bg-white/60 p-4"
+        className={styles.ledgerDisclosure}
         open={nonMonthlyDrafts.some((expense) => Object.keys(errors).some((key) => key.startsWith(`budget-non-monthly-${expense.id}-`))) || undefined}
       >
         <summary className="cursor-pointer text-sm font-semibold text-petrol">{labels.nonMonthlyExpenses}</summary>
         <p className="mt-3 text-sm leading-6 text-muted">{labels.nonMonthlyCopy}</p>
+        <p className="mt-2 text-xs leading-5 text-muted">{locale === "es"
+          ? "El importe se divide entre los meses de la frecuencia elegida y se redondea a la precisión de la moneda."
+          : "The amount is divided by the selected number of months and rounded to the currency’s precision."}</p>
         <button
           aria-describedby={nonMonthlyAtLimit ? "budget-non-monthly-limit" : undefined}
           className="mt-4 rounded-[4px] border border-petrol bg-petrol px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-panel hover:text-petrol disabled:cursor-not-allowed disabled:border-line disabled:bg-panelSoft disabled:text-muted"
@@ -292,11 +316,12 @@ export function BudgetExpensesStep({
       </details>
 
       <details
-        className="min-w-0 rounded-[6px] border border-line bg-white/60 p-4"
+        className={styles.ledgerDisclosure}
         open={smallDrafts.some((expense) => Object.keys(errors).some((key) => key.startsWith(`budget-small-${expense.id}-`))) || undefined}
       >
         <summary className="cursor-pointer text-sm font-semibold text-petrol">{labels.smallExpenses}</summary>
         <p className="mt-3 text-sm leading-6 text-muted">{labels.smallCopy}</p>
+        <p className="mt-2 text-xs leading-5 text-muted">{labels.expenseCadence}</p>
         <button
           aria-describedby={smallAtLimit ? "budget-small-limit" : undefined}
           className="mt-4 rounded-[4px] border border-petrol bg-petrol px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-panel hover:text-petrol disabled:cursor-not-allowed disabled:border-line disabled:bg-panelSoft disabled:text-muted"

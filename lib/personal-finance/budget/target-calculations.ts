@@ -265,11 +265,11 @@ export function calculateShortfall(
 export function calculateEmergencyFundProjection(
   plan: EmergencyFundPlan,
   coverageBaseMinor: number,
-  emergencyFundMinor: number,
+  emergencyFundMinor: number | null,
 ): EmergencyFundProjection {
   if (plan.target.kind === "unset") return { status: "unset" };
   if (!isSafeNonNegativeInteger(coverageBaseMinor)
-    || !isSafeNonNegativeInteger(emergencyFundMinor)) {
+    || (emergencyFundMinor !== null && !isSafeNonNegativeInteger(emergencyFundMinor))) {
     return { status: "rangeError" };
   }
   if (coverageBaseMinor === 0) return { status: "zero-base" };
@@ -285,6 +285,8 @@ export function calculateEmergencyFundProjection(
   }
   const target = safeNumber(BigInt(coverageBaseMinor) * BigInt(targetMonths));
   if (target.status !== "ok") return { status: "rangeError" };
+  if (emergencyFundMinor === null) return { status: "unknown-balance" };
+
   const shortfallMinor = Math.max(0, target.value - emergencyFundMinor);
   const contribution = plan.completionMonths === null || shortfallMinor === 0
     ? null
@@ -640,7 +642,7 @@ export function reconcileAllocationAmountsBigInt(
 function buildCoverageSnapshot(
   emergencyPlan: EmergencyFundPlan,
   coverageBaseMinor: bigint,
-  emergencyFundMinor: bigint,
+  emergencyFundMinor: bigint | null,
 ): ExactCalculation<BudgetTargetCoverageSnapshot> {
   const base = {
     completionMonths: emergencyPlan.completionMonths,
@@ -653,7 +655,7 @@ function buildCoverageSnapshot(
     targetMonths: null,
   };
   if (emergencyPlan.target.kind === "unset") {
-    const currentCoverage = coverageBaseMinor === BigInt(0)
+    const currentCoverage = coverageBaseMinor === BigInt(0) || emergencyFundMinor === null
       ? null
       : basisPointsFromBigIntAmount(emergencyFundMinor, coverageBaseMinor);
     if (currentCoverage?.status === "rangeError") return currentCoverage;
@@ -680,6 +682,9 @@ function buildCoverageSnapshot(
     return { reason: "unsafe-integer", status: "rangeError" };
   }
   const targetAmountMinor = coverageBaseMinor * BigInt(targetMonths);
+  if (emergencyFundMinor === null) {
+    return { status: "ok", value: { ...base, status: "unknown-balance", targetAmountMinor, targetMonths } };
+  }
   const shortfallMinor = targetAmountMinor > emergencyFundMinor
     ? targetAmountMinor - emergencyFundMinor
     : BigInt(0);
@@ -784,6 +789,11 @@ function calculateBigIntShortfall(
       };
 }
 
+export function splitSerGivingAmount(totalMinor: bigint, serShareBasisPoints: number) {
+  const serMinor = roundHalfUp(totalMinor * BigInt(serShareBasisPoints), BASIS_POINTS_TOTAL);
+  return { givingMinor: totalMinor - serMinor, serMinor };
+}
+
 export function buildBudgetTargetSnapshot({
   allocation,
   classification,
@@ -799,7 +809,7 @@ export function buildBudgetTargetSnapshot({
   classification: SavingsCurrentClassification;
   coverageBaseMinor: number;
   currentInput: CurrentAllocationInput;
-  emergencyFundMinor: number;
+  emergencyFundMinor: number | null;
   emergencyPlan: EmergencyFundPlan;
   hasValidationErrors: boolean;
   reserve: ContingencyReserve;
@@ -807,14 +817,14 @@ export function buildBudgetTargetSnapshot({
 }): ExactCalculation<BudgetTargetSnapshot> {
   if (!isSafeNonNegativeInteger(currentInput.incomeMinor)
     || !isSafeNonNegativeInteger(coverageBaseMinor)
-    || !isSafeNonNegativeInteger(emergencyFundMinor)
+    || (emergencyFundMinor !== null && !isSafeNonNegativeInteger(emergencyFundMinor))
     || !isSafeNonNegativeInteger(currentInput.monthlyNonMonthlyMinor)
     || !isSafeNonNegativeInteger(currentInput.smallExpensesMinor)) {
     return { reason: "unsafe-integer", status: "rangeError" };
   }
   const incomeMinor = BigInt(currentInput.incomeMinor);
   const coverageBase = BigInt(coverageBaseMinor);
-  const emergencyFund = BigInt(emergencyFundMinor);
+  const emergencyFund = emergencyFundMinor === null ? null : BigInt(emergencyFundMinor);
   const amountsResult = reconcileAllocationAmountsBigInt(
     incomeMinor,
     allocation,
@@ -867,17 +877,9 @@ export function buildBudgetTargetSnapshot({
 
   const current = classifyCurrentAllocation(currentInput, classification);
 
-  let serGivingAmounts = null;
-  if (serGiving.kind === "split") {
-    const serMinor = roundHalfUp(
-      amountsResult.value.serAndGiving * BigInt(serGiving.serShareBasisPoints),
-      BASIS_POINTS_TOTAL,
-    );
-    serGivingAmounts = {
-      givingMinor: amountsResult.value.serAndGiving - serMinor,
-      serMinor,
-    };
-  }
+  const serGivingAmounts = serGiving.kind === "split"
+    ? splitSerGivingAmount(amountsResult.value.serAndGiving, serGiving.serShareBasisPoints)
+    : null;
 
   return {
     status: "ok",

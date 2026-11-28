@@ -105,6 +105,7 @@ export type ReconciledAllocationAmounts = Record<AllocationCategory, number>;
 export type EmergencyFundProjection =
   | { status: "unset" }
   | { status: "zero-base" }
+  | { status: "unknown-balance" }
   | { status: "rangeError" }
   | {
       status: "calculated";

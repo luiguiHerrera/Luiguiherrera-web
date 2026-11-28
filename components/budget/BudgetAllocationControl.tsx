@@ -77,7 +77,7 @@ export function BudgetAllocationControl({
   onCommit,
   onValidationChange,
 }: {
-  amountMinor: number;
+  amountMinor: bigint;
   basisPoints: AllocationBasisPoints;
   category: AllocationCategory;
   currency: BudgetCurrency;
@@ -137,6 +137,12 @@ export function BudgetAllocationControl({
   }
 
   function commitAmount() {
+    if (amountDraft === formatMoneyInput(amountMinor, locale, currency)) {
+      setAmountEditing(false);
+      setAmountError(null);
+      onValidationChange(false);
+      return;
+    }
     const validation = validateAmountDraft(
       amountDraft,
       locale,

@@ -1,5 +1,8 @@
 "use client";
 
+import { BudgetComposition, budgetCompositionColors } from "./BudgetComposition";
+import { budgetCopy } from "./budget-copy";
+import styles from "./BudgetEditorial.module.css";
 import { useState } from "react";
 import { budgetProjectionCopy } from "@/components/budget/budget-projection-copy";
 import { budgetTargetCopy } from "@/components/budget/budget-target-copy";
@@ -44,15 +47,6 @@ const scenarioOrder: BudgetProjectionScenarioId[] = [
 
 const horizonOrder: BudgetProjectionHorizonMonths[] = [1, 12, 60];
 
-const categoryStyles: Record<AllocationCategory, string> = {
-  alp: "bg-petrol/75",
-  clf: "bg-brass",
-  education: "bg-ink/70",
-  enjoyment: "bg-brass/65",
-  essentials: "bg-petrol",
-  serAndGiving: "bg-muted",
-};
-
 function findCategory(
   result: BudgetProjectionResult | MonthlyBudgetProjectionScenario,
   category: AllocationCategory,
@@ -79,133 +73,32 @@ function statusText(
   return labels.statusExact;
 }
 
-function ScenarioBar({
-  currency,
-  locale,
-  result,
-}: {
+function ScenarioBar({ currency, locale, result, scale }: {
   currency: BudgetCurrency;
   locale: BudgetLocale;
   result: BudgetProjectionResult;
+  scale: bigint;
 }) {
   const labels = budgetProjectionCopy[locale];
   const targetLabels = budgetTargetCopy[locale];
-  const scenarioName = labels.scenarioNames[result.scenarioId];
-
-  if (result.knowledgeStatus === "partial") {
-    return (
-      <div
-        aria-label={`${scenarioName}. ${labels.partialInformation}. ${labels.knownSubtotal}: ${formatTargetMoney(result.comparableTotalMinor, locale, currency)}.`}
-        className="mt-4 border border-dashed border-petrol/45 bg-panelSoft p-4"
-        role="img"
-      >
-        <p className="text-sm font-semibold text-petrol">{labels.partialInformation}</p>
-        <p className="mt-1 break-words text-sm text-ink">
-          {labels.knownSubtotal}: {formatTargetMoney(result.comparableTotalMinor, locale, currency)}
-        </p>
-        {result.undifferentiatedMinor > BigInt(0) ? (
-          <p className="mt-1 break-words text-xs text-muted">
-            {labels.undifferentiated}: {formatTargetMoney(result.undifferentiatedMinor, locale, currency)}
-          </p>
-        ) : null}
-        <p className="mt-2 text-xs leading-5 text-muted">{labels.partialExplanation}</p>
-      </div>
-    );
-  }
-
-  const allocatedBasisPoints = result.allocatedBasisPoints ?? 0;
-  const fundedBasisPoints = Math.min(allocatedBasisPoints, 10_000);
-  const denominator = allocatedBasisPoints > 0 ? allocatedBasisPoints : 10_000;
-  const unallocatedBasisPoints = Math.max(0, 10_000 - fundedBasisPoints);
-
+  const segments = result.categories.map((category, index) => ({
+    label: targetLabels.categories[category.category].name,
+    amount: category.amountMinor ?? 0n,
+    color: budgetCompositionColors[index],
+  }));
+  segments.push({
+    label: labels.undifferentiated,
+    amount: result.undifferentiatedMinor,
+    color: budgetCompositionColors[6],
+  });
   return (
-    <div className="mt-4">
-      <div
-        aria-label={`${scenarioName}. ${statusText(result, locale)}.`}
-        className="flex h-10 w-full overflow-hidden border border-line bg-white"
-        role="group"
-      >
-        {result.categories.map((category) => {
-          const basisPoints = category.basisPoints ?? 0;
-          const visualWidth = allocatedBasisPoints > 0
-            ? (basisPoints / denominator) * (fundedBasisPoints / 100)
-            : 0;
-          if (visualWidth <= 0 || category.amountMinor === null) return null;
-          const categoryName = targetLabels.categories[category.category].name;
-          const accessibleLabel = `${categoryName}: ${formatBasisPoints(basisPoints, locale)} %, ${formatTargetMoney(category.amountMinor, locale, currency)}`;
-          return (
-            <span
-              aria-label={accessibleLabel}
-              className={`${categoryStyles[category.category]} block h-full border-r border-white/70 last:border-r-0`}
-              key={category.category}
-              role="img"
-              style={{ width: `${visualWidth}%` }}
-              title={accessibleLabel}
-            />
-          );
-        })}
-        {unallocatedBasisPoints > 0 ? (
-          <span
-            aria-label={`${labels.unallocated}: ${formatTargetMoney(result.unallocatedMinor, locale, currency)}`}
-            className="block h-full bg-white"
-            role="img"
-            style={{ width: `${unallocatedBasisPoints / 100}%` }}
-            title={`${labels.unallocated}: ${formatTargetMoney(result.unallocatedMinor, locale, currency)}`}
-          />
-        ) : null}
-      </div>
-      {result.excessMinor > BigInt(0) ? (
-        <p className="mt-2 border-l-2 border-brass pl-3 text-sm leading-6 text-ink">
-          <span className="font-semibold">{labels.excess}: </span>
-          {formatTargetMoney(result.excessMinor, locale, currency)}
-        </p>
-      ) : null}
-    </div>
-  );
-}
-
-function ScenarioCard({
-  currency,
-  locale,
-  result,
-}: {
-  currency: BudgetCurrency;
-  locale: BudgetLocale;
-  result: BudgetProjectionResult;
-}) {
-  const labels = budgetProjectionCopy[locale];
-  return (
-    <article className={`min-w-0 border bg-white/75 p-4 ${result.scenarioId === "target" ? "border-brass" : "border-line"}`}>
-      <p className="text-xs font-semibold uppercase tracking-[0.12em] text-petrol">
-        {labels.scenarioNames[result.scenarioId]}
+    <div className="min-w-0 border-b border-line pb-4">
+      <BudgetComposition currency={currency} income={result.accumulatedIncomeMinor} label={labels.scenarioNames[result.scenarioId]} locale={locale} scale={scale} segments={segments} />
+      <p className="mt-2 text-xs leading-5 text-muted">
+        {statusText(result, locale)}
+        {result.knowledgeStatus === "partial" ? ` · ${labels.partialInformation}. ${labels.partialExplanation}` : ""}
       </p>
-      <p className="mt-2 text-sm font-semibold leading-6 text-ink">{statusText(result, locale)}</p>
-      {result.knowledgeStatus === "partial" ? (
-        <p className="mt-1 text-xs font-semibold text-muted">{labels.statusPartial}</p>
-      ) : null}
-      <dl className="mt-4 grid grid-cols-2 gap-3 text-sm">
-        <div className="min-w-0">
-          <dt className="text-xs text-muted">{labels.horizon}</dt>
-          <dd className="mt-1 font-semibold text-ink">{labels.horizons[result.horizonMonths]}</dd>
-        </div>
-        <div className="min-w-0">
-          <dt className="text-xs text-muted">{labels.accumulatedIncome}</dt>
-          <dd className="mt-1 break-words font-semibold text-ink">{formatTargetMoney(result.accumulatedIncomeMinor, locale, currency)}</dd>
-        </div>
-        <div className="min-w-0">
-          <dt className="text-xs text-muted">{labels.totalAllocated}</dt>
-          <dd className="mt-1 break-words font-semibold text-ink">{formatTargetMoney(result.totalAllocatedMinor, locale, currency)}</dd>
-        </div>
-        <div className="min-w-0">
-          <dt className="text-xs text-muted">{labels.unallocated}</dt>
-          <dd className="mt-1 break-words font-semibold text-ink">{formatTargetMoney(result.unallocatedMinor, locale, currency)}</dd>
-        </div>
-        <div className="min-w-0 col-span-2">
-          <dt className="text-xs text-muted">{labels.excess}</dt>
-          <dd className="mt-1 break-words font-semibold text-ink">{formatTargetMoney(result.excessMinor, locale, currency)}</dd>
-        </div>
-      </dl>
-    </article>
+    </div>
   );
 }
 
@@ -424,6 +317,12 @@ export function BudgetProjection({
   ])) as Record<BudgetProjectionScenarioId, BudgetProjectionResult>;
   const comparisonSelection = selectVisibleProjectionComparison(projected, visible);
   const activeScenarios = comparisonSelection.activeScenarioIds;
+  const commonScale = activeScenarios.reduce((max, scenarioId) => {
+    const result = projected[scenarioId];
+    const extent = result.totalAllocatedMinor > result.accumulatedIncomeMinor
+      ? result.totalAllocatedMinor : result.accumulatedIncomeMinor;
+    return extent > max ? extent : max;
+  }, 0n);
   const focusContext = selectProjectionFocusContext({ horizonMonths: horizon, visible });
   const primaryScenarioId = focusContext.scenarioId;
   const primaryResult = projected[primaryScenarioId];
@@ -476,12 +375,13 @@ export function BudgetProjection({
         {labels.disclaimer}
       </p>
 
-      <section aria-labelledby="budget-projection-assumptions" className="mt-7 border border-line bg-panelSoft p-4">
-        <h3 className="font-semibold text-ink" id="budget-projection-assumptions">{labels.assumptionsTitle}</h3>
-        <ul className="mt-3 grid gap-2 text-sm leading-6 text-muted md:grid-cols-3">
+      <details className={styles.ledgerDisclosure}>
+        <summary className="cursor-pointer text-sm font-semibold text-petrol">{labels.assumptionsTitle}</summary>
+        <ul className="mt-3 grid gap-2 text-sm leading-6 text-muted md:grid-cols-2">
           {labels.assumptions.map((assumption) => <li key={assumption}>{assumption}</li>)}
+          <li>{budgetCopy[locale].expenseCadence}</li>
         </ul>
-      </section>
+      </details>
 
       <div className="mt-7 grid min-w-0 gap-6 lg:grid-cols-2">
         <fieldset className="min-w-0">
@@ -525,54 +425,30 @@ export function BudgetProjection({
         </fieldset>
       </div>
 
-      <section aria-labelledby="budget-projection-visual-title" className="mt-9 min-w-0">
-        <h3 className="text-xl font-semibold text-ink" id="budget-projection-visual-title">{labels.visualTitle}</h3>
-        <p className="mt-2 max-w-4xl text-sm leading-6 text-muted">{labels.visualDescription}</p>
-        <div className="mt-5 grid min-w-0 gap-4">
-          {activeScenarios.map((scenarioId) => (
-            <article className={`min-w-0 border bg-white/70 p-4 ${scenarioId === "target" ? "border-brass" : "border-line"}`} key={scenarioId}>
-              <div className="flex flex-wrap items-baseline justify-between gap-2">
-                <h4 className="font-semibold text-ink">{labels.scenarioNames[scenarioId]}</h4>
-                <span className="text-xs font-semibold text-muted">{labels.horizons[horizon]}</span>
-              </div>
-              <ScenarioBar currency={currency} locale={locale} result={projected[scenarioId]} />
-            </article>
+      <figure className={styles.figure}>
+        <figcaption>{labels.visualTitle} · {labels.horizons[horizon]}</figcaption>
+        <p className={styles.figureCaption}>{labels.visualDescription}</p>
+        {activeScenarios.map((scenarioId) => (
+          <ScenarioBar currency={currency} key={scenarioId} locale={locale} result={projected[scenarioId]} scale={commonScale} />
+        ))}
+        <ul className={styles.legend} aria-label={labels.legend}>
+          {allocationCategories.map((category, index) => (
+            <li key={category}><i style={{ backgroundColor: budgetCompositionColors[index] }} /><span>{targetLabels.categories[category].name}</span></li>
           ))}
-        </div>
-        <div className="mt-5" aria-label={labels.legend}>
-          <p className="text-xs font-semibold uppercase tracking-[0.12em] text-muted">{labels.legend}</p>
-          <ul className="mt-3 grid gap-2 text-xs text-ink sm:grid-cols-2 lg:grid-cols-4">
-            {allocationCategories.map((category) => (
-              <li className="flex items-start gap-2" key={category}>
-                <span aria-hidden="true" className={`mt-0.5 h-3 w-3 shrink-0 ${categoryStyles[category]}`} />
-                <span>{targetLabels.categories[category].name}</span>
-              </li>
-            ))}
-            <li className="flex items-start gap-2">
-              <span aria-hidden="true" className="mt-0.5 h-3 w-3 shrink-0 border border-line bg-white" />
-              <span>{labels.unallocated}</span>
-            </li>
-          </ul>
-        </div>
-      </section>
+          {activeScenarios.some((scenarioId) => projected[scenarioId].undifferentiatedMinor > 0n) ? (
+            <li><i style={{ backgroundColor: budgetCompositionColors[6] }} /><span>{labels.undifferentiated}</span></li>
+          ) : null}
+        </ul>
+      </figure>
 
-      <section aria-labelledby="budget-projection-scenarios-title" className="mt-9 min-w-0">
-        <h3 className="text-xl font-semibold text-ink" id="budget-projection-scenarios-title">{labels.scenarios}</h3>
-        <div className="mt-4 grid min-w-0 gap-4 md:grid-cols-2 xl:grid-cols-3">
-          {activeScenarios.map((scenarioId) => (
-            <ScenarioCard currency={currency} key={scenarioId} locale={locale} result={projected[scenarioId]} />
-          ))}
-        </div>
-      </section>
-
-      <section aria-labelledby="budget-projection-detail-title" className="mt-9 min-w-0">
-        <h3 className="text-xl font-semibold text-ink" id="budget-projection-detail-title">{labels.detailTitle}</h3>
+      <details className={styles.ledgerDisclosure}>
+        <summary className="cursor-pointer text-sm font-semibold text-petrol">{labels.detailTitle}</summary>
         <p className="mt-2 text-sm leading-6 text-muted">{labels.detailDescription}</p>
         <div className="mt-4 border border-line" role="table" aria-label={labels.detailTitle}>
           <div
             className="hidden gap-3 border-b border-line bg-panelSoft px-4 py-3 text-xs font-semibold uppercase tracking-[0.1em] text-muted lg:grid"
             role="row"
-            style={{ gridTemplateColumns: `minmax(12rem,1.35fr) repeat(${activeScenarios.length},minmax(10rem,1fr))` }}
+            style={{ gridTemplateColumns: `minmax(0,1.35fr) repeat(${activeScenarios.length},minmax(0,1fr))` }}
           >
             <span role="columnheader">{labels.category}</span>
             {activeScenarios.map((scenarioId) => <span key={scenarioId} role="columnheader">{labels.scenarioNames[scenarioId]}</span>)}
@@ -583,7 +459,7 @@ export function BudgetProjection({
                 className="block min-w-0 px-4 py-5 lg:grid lg:gap-3"
                 key={category}
                 role="row"
-                style={{ gridTemplateColumns: `minmax(12rem,1.35fr) repeat(${activeScenarios.length},minmax(10rem,1fr))` }}
+                style={{ gridTemplateColumns: `minmax(0,1.35fr) repeat(${activeScenarios.length},minmax(0,1fr))` }}
               >
                 <div className="min-w-0" role="rowheader">
                   <span className="font-semibold leading-6 text-ink">{targetLabels.categories[category].name}</span>
@@ -629,7 +505,7 @@ export function BudgetProjection({
             ))}
           </div>
         </div>
-      </section>
+      </details>
 
       <section aria-labelledby="budget-projection-highlights-title" className="mt-9 border-l-2 border-brass bg-white/75 p-5">
         <h3 className="text-xl font-semibold text-ink" id="budget-projection-highlights-title">{labels.projectionHighlights}</h3>

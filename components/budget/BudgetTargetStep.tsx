@@ -5,7 +5,7 @@ import { BudgetAllocationControl } from "@/components/budget/BudgetAllocationCon
 import { BudgetEmergencyFundTarget } from "@/components/budget/BudgetEmergencyFundTarget";
 import { budgetTargetCopy } from "@/components/budget/budget-target-copy";
 import {
-  splitCurrentSaving,
+  splitSerGivingAmount,
 } from "@/lib/personal-finance/budget/target-calculations";
 import {
   allocationCategories,
@@ -26,13 +26,6 @@ import {
   formatBasisPoints,
   parseLocalizedPercentage,
 } from "@/lib/personal-finance/budget/target-validation";
-
-function controlNumber(value: bigint) {
-  if (value < BigInt(0) || value > BigInt(Number.MAX_SAFE_INTEGER)) {
-    throw new RangeError("Minor-unit value is outside the control range");
-  }
-  return Number(value);
-}
 
 export function BudgetTargetStep({
   allocation,
@@ -90,23 +83,10 @@ export function BudgetTargetStep({
         );
   const parsedSer = parseLocalizedPercentage(serDraft, locale);
   const provisionalSer = parsedSer.error === null && parsedSer.basisPoints !== null
-    ? splitCurrentSaving(controlNumber(amounts.serAndGiving), parsedSer.basisPoints)
+    ? splitSerGivingAmount(amounts.serAndGiving, parsedSer.basisPoints)
     : null;
-  const appliedSer = snapshot.serGivingAmounts
-    ? {
-        givingMinor: snapshot.serGivingAmounts.givingMinor,
-        serMinor: snapshot.serGivingAmounts.serMinor,
-      }
-    : null;
-  const serGivingHasTotal = amounts.serAndGiving > BigInt(0);
-  const visibleSer = serGivingHasTotal
-    ? provisionalSer?.status === "ok"
-      ? {
-          givingMinor: BigInt(provisionalSer.value.clfMinor),
-          serMinor: BigInt(provisionalSer.value.alpMinor),
-        }
-      : appliedSer
-    : null;
+  const serGivingHasTotal = amounts.serAndGiving > 0n;
+  const visibleSer = serGivingHasTotal ? provisionalSer ?? snapshot.serGivingAmounts : null;
 
   function setValidation(key: string, invalid: boolean) {
     onValidationChange(key, invalid);
@@ -136,27 +116,11 @@ export function BudgetTargetStep({
         <p className="mt-2 text-sm leading-6 text-muted">{labels.allocationHelp}</p>
       </details>
 
-      <div className="mt-6">
-        <BudgetEmergencyFundTarget
-          currency={currency}
-          incomeMinor={currentInput.incomeMinor}
-          locale={locale}
-          onPlanChange={onEmergencyPlanChange}
-          onReserveChange={onReserveChange}
-          onReserveChoiceChange={onReserveChoiceChange}
-          onReserveDraftChange={onReserveDraftChange}
-          onValidationChange={setValidation}
-          plan={emergencyPlan}
-          reserveChoice={reserveChoice}
-          reserveDraft={reserveDraft}
-          snapshot={snapshot}
-        />
-      </div>
 
       <div className="mt-6 grid min-w-0 gap-5 lg:grid-cols-2">
         {allocationCategories.map((category: AllocationCategory) => (
           <BudgetAllocationControl
-            amountMinor={controlNumber(amounts[category])}
+            amountMinor={amounts[category]}
             basisPoints={allocation[category]}
             category={category}
             currency={currency}
@@ -236,16 +200,22 @@ export function BudgetTargetStep({
         <p className="mt-1 text-sm leading-6 text-muted">{sumCopy[1]}</p>
       </section>
 
-      {snapshot.essentialsShortfall?.status === "ok" && snapshot.essentialsShortfall.amountMinor! > BigInt(0) ? (
-        <p className="mt-4 border-l-2 border-red-700 bg-red-50 px-4 py-3 text-sm leading-6 text-red-900">
-          {labels.essentialsShortfall(
-            formatTargetMoney(snapshot.essentialsShortfall.amountMinor!, locale, currency),
-            snapshot.essentialsShortfall.basisPoints === null
-              ? "—"
-              : `${formatBasisPoints(snapshot.essentialsShortfall.basisPoints, locale)} %`,
-          )}
-        </p>
-      ) : null}
+      <div className="mt-6">
+        <BudgetEmergencyFundTarget
+          currency={currency}
+          incomeMinor={currentInput.incomeMinor}
+          locale={locale}
+          onPlanChange={onEmergencyPlanChange}
+          onReserveChange={onReserveChange}
+          onReserveChoiceChange={onReserveChoiceChange}
+          onReserveDraftChange={onReserveDraftChange}
+          onValidationChange={setValidation}
+          plan={emergencyPlan}
+          reserveChoice={reserveChoice}
+          reserveDraft={reserveDraft}
+          snapshot={snapshot}
+        />
+      </div>
 
       {snapshot.alpBaseMinor !== null ? (
         <div className="mt-4 border border-line bg-panelSoft p-4">
@@ -254,9 +224,7 @@ export function BudgetTargetStep({
             <summary className="cursor-pointer text-xs font-semibold text-petrol">{labels.categoryDetails}</summary>
             <p className="mt-2 text-xs leading-5 text-muted">{labels.alpBaseHelp}</p>
           </details>
-          {snapshot.alpShortfall?.status === "ok" && snapshot.alpShortfall.amountMinor! > BigInt(0) ? (
-            <p className="mt-3 text-sm leading-6 text-red-900">{labels.alpShortfall(formatTargetMoney(snapshot.alpShortfall.amountMinor!, locale, currency))}</p>
-          ) : null}
+
         </div>
       ) : null}
 

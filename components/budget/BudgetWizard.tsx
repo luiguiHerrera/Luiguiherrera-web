@@ -1,5 +1,8 @@
 "use client";
 
+import styles from "./BudgetEditorial.module.css";
+import { BudgetTargetComposition } from "./BudgetTargetComposition";
+import { BudgetCoverageNotice } from "./BudgetCoverageNotice";
 import {
   useEffect,
   useRef,
@@ -421,7 +424,7 @@ export function BudgetWizard({ locale }: { locale: BudgetLocale }) {
       currency,
       debtPaymentsMinor: mainDrafts.debtPayments.minorUnits ?? 0,
       educationMinor: mainDrafts.education.minorUnits ?? 0,
-      emergencyFundMinor: mainDrafts.emergencyFund.minorUnits ?? 0,
+      emergencyFundMinor: mainDrafts.emergencyFund.minorUnits,
       enjoymentMinor: mainDrafts.enjoyment.minorUnits ?? 0,
       essentialsMinor: mainDrafts.essentials.minorUnits ?? 0,
       monthlyIncomeMinor: income.minorUnits ?? 0,
@@ -538,6 +541,10 @@ export function BudgetWizard({ locale }: { locale: BudgetLocale }) {
     focusElement(nextFocus ? `budget-small-${nextFocus.id}-name` : "budget-add-small");
   }
 
+  const partialInputs = Object.values(mainDrafts).some((draft) => draft.minorUnits === null)
+    || nonMonthlyDrafts.some((row) => row.amount.minorUnits === null)
+    || smallDrafts.some((row) => row.amount.minorUnits === null);
+
   const stepLabels = [
     labels.step1Label,
     labels.step2Label,
@@ -545,7 +552,7 @@ export function BudgetWizard({ locale }: { locale: BudgetLocale }) {
     labels.step4Label,
     labels.step5Label,
   ];
-  const currentInput: CurrentAllocationInput | null = result ? {
+  const currentInput: CurrentAllocationInput | null = step >= 3 && result ? {
     debtPaymentsMinor: mainDrafts.debtPayments.minorUnits,
     educationMinor: mainDrafts.education.minorUnits,
     enjoymentMinor: mainDrafts.enjoyment.minorUnits,
@@ -707,44 +714,18 @@ export function BudgetWizard({ locale }: { locale: BudgetLocale }) {
   }
 
   return (
-    <section className="mt-8 rounded-[6px] border border-line bg-panel p-5 shadow-[0_12px_32px_rgba(11,52,54,0.035)] md:p-6" aria-labelledby={`budget-step-${step}-heading`}>
-      <p className="text-sm font-semibold text-petrol">{labels.noDataSaved}</p>
-      <p className="mt-2 max-w-4xl text-sm leading-6 text-muted">{labels.privacyLong}</p>
-
-      <div className="mt-6 sm:hidden">
-        <ol aria-label={locale === "es" ? "Progreso del presupuesto" : "Budget progress"} className="grid grid-cols-5 gap-1.5">
-          {stepLabels.map((label, index) => {
-            const number = (index + 1) as BudgetWizardStep;
-            return (
-              <li
-                aria-current={step === number ? "step" : undefined}
-                className={`min-w-0 border-t-4 px-1 pt-2 text-center text-xs font-semibold ${step === number ? "border-petrol text-petrol" : "border-line text-muted"}`}
-                key={label}
-              >
-                <span aria-hidden="true">{number}</span>
-                <span className="sr-only">{labels.step} {number}: {label}</span>
-              </li>
-            );
-          })}
-        </ol>
-        <p className="mt-3 text-sm font-semibold text-ink">
-          <span className="text-petrol">{labels.step} {step}</span>
-          <span aria-hidden="true"> · </span>
-          {stepLabels[step - 1]}
-        </p>
-      </div>
-
-      <ol aria-label={locale === "es" ? "Progreso del presupuesto" : "Budget progress"} className="mt-6 hidden gap-2 sm:grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5">
+    <section className={styles.wizard} id="budget-simulator" aria-labelledby={`budget-step-${step}-heading`}>
+      <header className={styles.progressHeader}>
+        <p className={styles.eyebrow}>{locale === "es" ? "Simulador de presupuesto" : "Budget simulator"}</p>
+        <p className={styles.progressCount}>{labels.step} {step} / {stepLabels.length}</p>
+      </header>
+      <ol aria-label={locale === "es" ? "Progreso del presupuesto" : "Budget progress"} className={styles.progress}>
         {stepLabels.map((label, index) => {
-          const number = (index + 1) as BudgetWizardStep;
+          const number = index + 1;
           return (
-            <li
-              aria-current={step === number ? "step" : undefined}
-              className={`border px-3 py-3 text-sm ${step === number ? "border-petrol bg-petrol text-white" : "border-line bg-white/70 text-muted"}`}
-              key={label}
-            >
-              <span className="block text-[11px] font-semibold uppercase tracking-[0.14em]">{labels.step} {number}</span>
-              <span className="mt-1 block font-semibold">{label}</span>
+            <li aria-current={step === number ? "step" : undefined} data-complete={number < step} key={label}>
+              <span aria-hidden="true" className={styles.stepNumber}>0{number}</span>
+              <span className={styles.stepName}>{label}</span>
             </li>
           );
         })}
@@ -768,7 +749,6 @@ export function BudgetWizard({ locale }: { locale: BudgetLocale }) {
 
       {step === 1 ? (
         <form className="mt-6" noValidate onSubmit={submitIncome}>
-          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-petrol">01</p>
           <h2 className="mt-2 text-2xl font-semibold leading-tight text-ink" id="budget-step-1-heading" tabIndex={-1}>{labels.step1Title}</h2>
           <BudgetIncomeStep
             currency={currency}
@@ -791,7 +771,6 @@ export function BudgetWizard({ locale }: { locale: BudgetLocale }) {
 
       {step === 2 ? (
         <form className="mt-6" noValidate onSubmit={submitExpenses}>
-          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-petrol">02</p>
           <h2 className="mt-2 text-2xl font-semibold leading-tight text-ink" id="budget-step-2-heading" tabIndex={-1}>{labels.step2Title}</h2>
           <BudgetExpensesStep
             currency={currency}
@@ -823,9 +802,8 @@ export function BudgetWizard({ locale }: { locale: BudgetLocale }) {
 
       {step === 3 && result ? (
         <div className="mt-6">
-          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-petrol">03</p>
           <h2 className="mt-2 text-2xl font-semibold leading-tight text-ink" id="budget-step-3-heading" tabIndex={-1}>{labels.step3Title}</h2>
-          <BudgetResults currency={currency} locale={locale} result={result} />
+          <BudgetResults currency={currency} input={buildInput()} locale={locale} partial={partialInputs} result={result} />
           {mainDrafts.savingInvestment.minorUnits !== null && mainDrafts.savingInvestment.minorUnits > 0 ? (
             <BudgetCurrentClassification
               classification={currentClassification}
@@ -848,7 +826,6 @@ export function BudgetWizard({ locale }: { locale: BudgetLocale }) {
 
       {step === 4 && result && currentInput ? (
         <div className="mt-6">
-          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-petrol">04</p>
           <h2 className="mt-2 text-2xl font-semibold leading-tight text-ink" id="budget-step-4-heading" tabIndex={-1}>
             {targetLabels.reviewTitle}
           </h2>
@@ -859,6 +836,8 @@ export function BudgetWizard({ locale }: { locale: BudgetLocale }) {
                 : "The allocation cannot be calculated within the safe range.")}
             </p>
           ) : (
+            <>
+            <BudgetCoverageNotice currency={currency} locale={locale} partial={partialInputs} snapshot={targetSnapshot} />
             <div className="mt-6 grid min-w-0 gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(15rem,19rem)]">
                 <BudgetTargetSummary
                   currency={currency}
@@ -870,6 +849,7 @@ export function BudgetWizard({ locale }: { locale: BudgetLocale }) {
                   snapshot={targetSnapshot}
                 />
                 <div className="min-w-0 lg:col-start-1 lg:row-start-1">
+                <BudgetTargetComposition currentTotal={result.totalAssignedMinor} currency={currency} locale={locale} snapshot={targetSnapshot} />
                 {targetMode === "edit" ? (
                   <>
                     <BudgetTargetStep
@@ -970,16 +950,17 @@ export function BudgetWizard({ locale }: { locale: BudgetLocale }) {
                   </dialog>
                 </div>
               </div>
+            </>
           )}
         </div>
       ) : null}
 
       {step === 5 && result && projectionScenarios && targetSnapshot ? (
         <div className="mt-6 min-w-0">
-          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-petrol">05</p>
           <h2 className="mt-2 text-2xl font-semibold leading-tight text-ink" id="budget-step-5-heading" tabIndex={-1}>
             {projectionLabels.title}
           </h2>
+          <BudgetCoverageNotice currency={currency} locale={locale} partial={partialInputs} snapshot={targetSnapshot} />
           <div className="mt-6 min-w-0">
             <BudgetProjection
               currency={currency}

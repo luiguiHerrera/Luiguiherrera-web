@@ -90,6 +90,11 @@ export function BudgetTargetReview({
           <div className="border border-line bg-panelSoft p-4">
             <dt className="text-xs font-semibold uppercase tracking-[0.12em] text-muted">{labels.summaryTargetCoverage}</dt>
             <dd className="mt-2 font-semibold text-ink">{targetCoverage}</dd>
+            {snapshot.coverage.status === "unknown-balance" ? (
+              <dd className="mt-1 text-sm text-muted">
+                {locale === "es" ? "Faltante no calculable sin el saldo actual." : "Shortfall cannot be calculated without the current balance."}
+              </dd>
+            ) : null}
             {snapshot.coverage.shortfallMinor !== null ? (
               <dd className="mt-1 text-sm text-muted">
                 {locale === "es" ? "Faltante: " : "Shortfall: "}

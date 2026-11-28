@@ -107,7 +107,19 @@ export function BudgetIncomeStep({
   const labels = budgetCopy[locale];
 
   return (
-    <div className="mt-6 grid gap-5 md:grid-cols-2">
+    <div className="mt-6 grid max-w-4xl gap-5 sm:grid-cols-[1.2fr_1fr]">
+      <div className="min-w-0">
+        <BudgetMoneyField
+          describedBy="budget-income-help"
+          draft={income}
+          error={incomeError}
+          id="budget-income"
+          label={labels.income}
+          onBlur={onIncomeBlur}
+          onChange={onIncomeChange}
+        />
+        <p className="mt-2 text-sm leading-5 text-muted" id="budget-income-help">{labels.monthlyIncomeHelp}</p>
+      </div>
       <label className="grid gap-2" htmlFor="budget-currency">
         <span className="text-xs font-semibold uppercase tracking-[0.14em] text-muted">{labels.currency}</span>
         <select
@@ -124,18 +136,7 @@ export function BudgetIncomeStep({
         <span className="text-sm leading-5 text-muted" id="budget-currency-help">{labels.currencyHelp}</span>
       </label>
 
-      <BudgetMoneyField
-        describedBy="budget-income-help"
-        draft={income}
-        error={incomeError}
-        id="budget-income"
-        label={labels.income}
-        onBlur={onIncomeBlur}
-        onChange={onIncomeChange}
-      />
-      <p className="sr-only" id="budget-income-help">{labels.monthlyIncomeHelp}</p>
-
-      <label className="grid gap-2 md:col-span-2" htmlFor="budget-priority">
+      <label className="grid gap-2 sm:col-span-2" htmlFor="budget-priority">
         <span className="text-xs font-semibold uppercase tracking-[0.14em] text-muted">{labels.focusQuestion} · {labels.fieldOptional}</span>
         <select
           className="rounded-[4px] border border-line bg-white/80 px-3 py-2.5 text-sm font-semibold text-ink outline-none transition focus:border-petrol focus:bg-white md:max-w-xl"

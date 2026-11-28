@@ -57,7 +57,7 @@ export type BudgetInput = {
   currency: BudgetCurrency;
   debtPaymentsMinor: number;
   educationMinor: number;
-  emergencyFundMinor: number;
+  emergencyFundMinor: number | null;
   enjoymentMinor: number;
   essentialsMinor: number;
   monthlyIncomeMinor: number;
