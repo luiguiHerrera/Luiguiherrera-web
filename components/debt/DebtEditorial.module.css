@@ -1,0 +1,214 @@
+@font-face {
+  font-family: "Debt Editorial";
+  src: url("/fonts/playfair-display-500.ttf") format("truetype");
+  font-display: swap;
+  font-weight: 500;
+}
+
+.page {
+  --debt-ink: #203630;
+  --debt-title: #173e34;
+  --debt-muted: #465b55;
+  --debt-bronze: #825b2d;
+  --debt-line: #d5ccbd;
+  --debt-paper: #fffdf8;
+  --debt-wash: #f4f0e7;
+  --debt-alert: #823b28;
+  --debt-serif: "Debt Editorial", Georgia, serif;
+  max-width: 86rem;
+  margin-inline: auto;
+  padding: 0 clamp(1rem, 4.5vw, 4.25rem) 5rem;
+  color: var(--debt-ink);
+  overflow-wrap: anywhere;
+}
+
+.page :is(a, button, select, summary, input):focus-visible {
+  outline: 2px solid #246c5d;
+  outline-offset: 3px;
+}
+
+.hero {
+  position: relative;
+  display: flex;
+  align-items: center;
+  min-height: clamp(24rem, 35vw, 31rem);
+  isolation: isolate;
+}
+
+.panorama {
+  position: absolute;
+  z-index: -1;
+  inset: 0 -2.5% 0 8%;
+  background: url("/images/debt/panorama.webp") center 74% / cover no-repeat;
+  mask-image: linear-gradient(to right, transparent 4%, #0002 29%, #000a 58%, black 81%);
+}
+
+.heroCopy { max-width: 41rem; padding-block: 3.5rem 3.85rem; }
+.kicker { font-size: .72rem; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; color: var(--debt-bronze); }
+
+.hero h1 {
+  margin: .75rem 0 1rem;
+  font: 500 clamp(3.3rem, 7vw, 6.4rem)/.99 var(--debt-serif);
+  letter-spacing: -.065em;
+  color: var(--debt-title);
+  text-wrap: balance;
+}
+
+.subtitle { max-width: 29rem; font-size: clamp(1.05rem, 1.8vw, 1.35rem); line-height: 1.5; color: var(--debt-title); }
+.intro { max-width: 27rem; margin-top: .8rem; font-size: .95rem; line-height: 1.65; color: var(--debt-muted); }
+.chips { display: flex; flex-wrap: wrap; gap: .4rem; margin: 1.25rem 0 0; padding: 0; list-style: none; }
+.chips li { border: 1px solid var(--debt-line); padding: .35rem .65rem; color: var(--debt-title); background: #fffdf8c7; font-size: .73rem; font-weight: 650; }
+
+.about { border-block: 1px solid var(--debt-line); margin-top: .6rem; }
+.about > summary, .fold > summary, .debtRow > details > summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: .8rem;
+  cursor: pointer;
+  list-style: none;
+  color: var(--debt-title);
+  font-weight: 650;
+}
+.about > summary::-webkit-details-marker, .fold > summary::-webkit-details-marker, .debtRow > details > summary::-webkit-details-marker { display: none; }
+.about > summary::after, .fold > summary::after, .debtRow > details > summary::after { content: "+"; color: var(--debt-bronze); font-size: 1.25rem; font-weight: 400; }
+.about[open] > summary::after, .fold[open] > summary::after, .debtRow[open] > summary::after { content: "−"; }
+.about > summary { padding-block: .7rem; min-height: 2.8rem; font-size: .9rem; }
+.about dl { display: grid; gap: .85rem 2rem; grid-template-columns: repeat(2, minmax(0, 1fr)); padding: .2rem 0 1.3rem; }
+.about dt { font-weight: 650; }
+.about dd, .privacy { font-size: .86rem; line-height: 1.6; color: var(--debt-muted); }
+.privacy { border-left: 2px solid #ae8555; padding-left: .85rem; margin: 1rem 0; }
+
+.workbench { min-width: 0; display: grid; gap: 1rem; }
+.navigation {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: .25rem 1.5rem;
+  border-top: 1px solid var(--debt-line);
+  padding-block: .2rem;
+}
+.navigation a {
+  padding: .8rem 0;
+  text-decoration: none;
+  color: var(--debt-title);
+  font-size: .82rem;
+  font-weight: 680;
+}
+.navigation a:hover, .navigation a:focus-visible { text-decoration: underline; text-underline-offset: .24em; }
+.section { padding: clamp(1rem, 2.8vw, 2.35rem); border: 1px solid var(--debt-line); background: var(--debt-paper); min-width: 0; scroll-margin-top: 5.3rem; }
+.section:first-of-type { border-top: 2px solid #aa804c; }
+.sectionHeading { margin: 0; color: var(--debt-title); font: 500 clamp(1.85rem, 4vw, 2.85rem)/1.1 var(--debt-serif); letter-spacing: -.04em; text-wrap: balance; }
+.subhead { margin: 0 0 .7rem; font-size: .89rem; font-weight: 700; color: var(--debt-title); }
+.fold { margin-top: .9rem; padding: .65rem 0; border-block: 1px solid var(--debt-line); }
+.fold > summary { min-height: 1.8rem; font-size: .9rem; }
+.debtRow { border: 1px solid var(--debt-line); background: #faf7ef; min-width: 0; }
+.debtRow > details > summary { min-height: 3.3rem; padding: .75rem 1rem; font-size: .97rem; }
+.debtRow > details > summary > span { align-items: baseline; gap: .35rem .8rem; display: flex; flex-wrap: wrap; }
+.debtRow > details > summary small { color: var(--debt-muted); font-weight: 500; }
+.debtOverview { display: grid; gap: .65rem 1.3rem; grid-template-columns: repeat(5, minmax(0, 1fr)); margin: 0; padding: 0 1rem .85rem; }
+.debtOverview dt { color: var(--debt-muted); font-size: .75rem; }
+.debtOverview dd { font-size: .86rem; color: var(--debt-title); font-variant-numeric: tabular-nums; font-weight: 650; }
+.debtEditor { padding: 1rem; border-top: 1px solid var(--debt-line); background: var(--debt-paper); }
+.warning { border-left: 2px solid #a7543c; color: var(--debt-alert); padding-left: .65rem; font-size: .84rem; line-height: 1.55; margin: .6rem 0; }
+
+.metrics {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 9.9rem), 1fr));
+  gap: .5rem 1.25rem;
+  padding-block: .55rem .85rem;
+  border-block: 1px solid var(--debt-line);
+  margin-block: 1rem;
+}
+.metric { min-width: 0; padding-block: .45rem .15rem; }
+.metric p:first-child { min-height: 1.5em; font-size: .77rem; line-height: 1.35; color: var(--debt-muted); font-weight: 620; }
+.metric p:nth-child(2) { margin-top: .4rem; color: var(--debt-title); font-size: clamp(1.25rem, 2.3vw, 1.9rem); font-weight: 620; line-height: 1.08; letter-spacing: -.035em; font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
+.metric p:nth-child(3) { margin-top: .35rem; color: var(--debt-muted); font-size: .76rem; line-height: 1.45; }
+
+.figure {
+  min-width: 0;
+  margin: 0;
+  padding: clamp(.9rem, 2vw, 1.5rem);
+  border: 1px solid var(--debt-line);
+  background: #fbf8f0;
+}
+.figureTitle { font: 500 clamp(1.25rem, 2.4vw, 1.65rem)/1.15 var(--debt-serif); letter-spacing: -.025em; color: var(--debt-title); }
+.figureSub { margin-top: .45rem; color: var(--debt-muted); font-size: .81rem; line-height: 1.55; }
+.chartEmpty { margin-top: .95rem; padding: 1rem .85rem; border-block: 1px dashed var(--debt-line); font-size: .86rem; color: var(--debt-muted); }
+
+.flowTrack { position: relative; display: flex; height: 1.15rem; margin: 1rem 0 .85rem; background: #eee9de; outline: 1px solid var(--debt-line); }
+.flowTrack > span:not(.incomeMarker, .overflow) { height: 100%; }
+.flowTrack .incomeMarker { position: absolute; inset-block: -.2rem; width: 0; border-left: 2px dotted #1d2d27; }
+.flowTrack .overflow { position: absolute; inset-block: 0; right: 0; background: repeating-linear-gradient(135deg, transparent 0 5px, #842d2177 5px 7px); }
+.flowLegend { list-style: none; margin: .75rem 0 0; padding: 0; }
+.flowLegend li { display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(3rem, auto); align-items: baseline; border-top: 1px solid #dfd8cc; gap: .45rem .7rem; padding: .5rem 0; font-size: .83rem; }
+.flowLegend strong, .flowLegend small { font-variant-numeric: tabular-nums; text-align: right; }
+.flowLegend small { color: var(--debt-muted); font-size: .76rem; }
+.flowLegend i { display: inline-block; vertical-align: .08em; width: .52rem; height: .52rem; margin-right: .4rem; }
+
+.chartBody { display: grid; grid-template-columns: minmax(3.8rem, auto) minmax(0, 1fr); grid-template-rows: auto 1.5rem; margin-top: .6rem; }
+.plot { grid-row: 1; grid-column: 2; display: block; width: 100%; height: clamp(11rem, 25vw, 17rem); overflow: visible; }
+.yAxis { display: flex; flex-direction: column; justify-content: space-between; align-items: flex-end; padding: .25rem .5rem .25rem 0; min-width: 0; max-width: clamp(4.5rem, 19vw, 11rem); font-size: clamp(.625rem, 1.1vw, .76rem); font-variant-numeric: tabular-nums; text-align: right; }
+.yAxis span:only-child { margin-top: auto; }
+.xAxis { position: relative; grid-row: 2; grid-column: 2; font-size: .73rem; font-variant-numeric: tabular-nums; }
+.xAxis span { position: absolute; top: .28rem; transform: translateX(-50%); }
+.chartControls { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: .5rem 1rem; margin-top: .25rem; font-size: .81rem; color: var(--debt-muted); }
+.chartControls label { display: flex; flex-wrap: wrap; gap: .4rem; align-items: center; }
+.chartControls select { border: 1px solid var(--debt-line); background: var(--debt-paper); border-radius: 3px; padding: .25rem; color: var(--debt-title); }
+.balanceReadout { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 10rem), 1fr)); margin-top: .8rem; gap: .6rem 1rem; border-top: 1px solid var(--debt-line); padding-top: .85rem; }
+.balanceReadout > div { display: grid; gap: .15rem; min-width: 0; }
+.balanceReadout span { color: var(--debt-muted); font-size: .82rem; }
+.balanceReadout strong { font-size: 1.15rem; color: var(--debt-title); font-variant-numeric: tabular-nums; }
+.balanceReadout small { color: var(--debt-muted); font-size: .75rem; }
+.lineKey { display: inline-block; vertical-align: .22em; width: 1.35rem; margin-right: .42rem; border-top-width: 3px; }
+
+.costGroups, .timelineGrid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .9rem 1.2rem; margin-top: .8rem; }
+.costGroups > div, .timelineGrid > section { min-width: 0; border-top: 1px solid var(--debt-line); padding-top: .7rem; }
+.costGroups h4, .timelineGrid h4 { font-size: .87rem; font-weight: 700; color: var(--debt-title); }
+.costGroups p { font-size: .75rem; color: var(--debt-muted); }
+.costGroups dl { display: grid; gap: .65rem; margin-top: .65rem; }
+.costGroups dl > div { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: .3rem; font-size: .79rem; line-height: 1.3; }
+.costGroups dd { font-weight: 660; text-align: right; font-variant-numeric: tabular-nums; }
+.miniTrack { grid-column: 1/-1; height: .31rem; overflow: hidden; background: #e9e3d7; }
+.miniTrack span { display: block; height: 100%; }
+.timelineGrid ol { display: grid; gap: .8rem; margin: .7rem 0; list-style: none; padding: 0; }
+.timelineGrid li { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: .35rem; font-size: .8rem; }
+.timelineGrid li small { display: block; font-size: .72rem; color: var(--debt-bronze); }
+.timelineTrack { grid-column: 1/-1; height: 1px; position: relative; margin: .18rem .25rem; background: #aeb2a5; }
+.timelineTrack span { position: absolute; top: 50%; width: .43rem; height: .43rem; transform: translate(-50%, -50%); border-radius: 50%; }
+.timelineTotal { margin-top: .75rem; font-size: .82rem; font-weight: 650; color: var(--debt-title); }
+
+.split { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: start; gap: .8rem; }
+.composition { list-style: none; display: grid; gap: .55rem; margin-top: .8rem; padding: 0; }
+.composition li { display: grid; grid-template-columns: minmax(0, 1fr) minmax(3rem, .85fr) auto; gap: .5rem; font-size: .83rem; align-items: center; }
+.composition b { text-align: right; font-variant-numeric: tabular-nums; }
+
+@media (max-width: 800px) {
+  .split { grid-template-columns: minmax(0, 1fr); }
+  .heroCopy { max-width: 70%; }
+  .panorama { inset-inline-start: 3%; mask-image: linear-gradient(to right, transparent 6%, #0004 51%, #000e 94%); }
+  .debtOverview { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+@media (max-width: 540px) {
+  .hero { min-height: 0; display: block; padding-top: .1rem; }
+  .heroCopy { max-width: 100%; padding-block: 1.45rem 9.1rem; }
+  .hero h1 { font-size: clamp(2.7rem, 11.8vw, 4rem); margin: .5rem 0 .85rem; }
+  .panorama { inset: auto -.4rem 0; height: 11.5rem; background-position: 80% 79%; mask-image: linear-gradient(to bottom, transparent 0%, #000c 45%, black 85%); }
+  .intro { font-size: .86rem; }
+  .chips { margin-top: .7rem; }
+  .about dl, .costGroups, .timelineGrid { grid-template-columns: minmax(0, 1fr); }
+  .navigation { gap: .1rem .85rem; }
+  .navigation a { padding-block: .5rem; }
+  .debtOverview { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .flowLegend li { grid-template-columns: minmax(0, 1fr) minmax(2.8rem, .68fr) minmax(2.1rem, .32fr); }
+  .costGroups dl > div, .composition li { grid-template-columns: minmax(0, 1fr) minmax(3.3rem, auto); }
+  .composition li .miniTrack { grid-row: 2; grid-column: 1/-1; }
+}
+
+.marginTrack { position: relative; grid-column: 1/-1; height: .34rem; background: #e9e3d7; }
+.marginTrack::before { content: ""; position: absolute; inset-block: -.13rem; left: 50%; border-left: 1px solid #6a7369; z-index: 1; }
+.marginTrack span { position: absolute; inset-block: 0; }
+.incompleteBar { background-image: repeating-linear-gradient(135deg, #fff6 0 4px, transparent 4px 8px); }
+
+.chartBody { position: relative; }
+.hoverCard { position: absolute; top: .7rem; z-index: 1; pointer-events: none; display: grid; max-width: 48%; gap: .25rem; padding: .6rem .8rem; border: 1px solid var(--debt-line); background: var(--debt-paper); color: var(--debt-title); box-shadow: 0 6px 20px #21362e18; font-size: .8rem; font-variant-numeric: tabular-nums; }

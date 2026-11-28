@@ -2,6 +2,7 @@
 
 import { useId } from "react";
 import type { FieldError, FieldResult } from "@/lib/debt/debt-input";
+import styles from "./DebtEditorial.module.css";
 import type { BudgetLocale } from "@/lib/personal-finance/budget/types";
 
 export const fieldClass = "w-full min-w-0 rounded-[4px] border border-line bg-white/80 px-2.5 py-2 text-sm font-semibold text-ink outline-none transition focus:border-petrol focus:bg-white";
@@ -22,6 +23,10 @@ const errors = {
   },
 } satisfies Record<BudgetLocale, Record<FieldError, string>>;
 
+export function debtFieldError(parsed: FieldResult, locale: BudgetLocale) {
+  return parsed.error ? errors[locale][parsed.error] : null;
+}
+
 export function DebtField({ label, text, onChange, parsed, locale, hint, error, mode = "decimal" }: {
   label: string;
   text: string;
@@ -33,7 +38,7 @@ export function DebtField({ label, text, onChange, parsed, locale, hint, error, 
   mode?: "decimal" | "numeric";
 }) {
   const id = useId();
-  const message = error ?? (parsed.error ? errors[locale][parsed.error] : null);
+  const message = error ?? debtFieldError(parsed, locale);
   return (
     <div className="grid min-w-0 content-start gap-2">
       <label className={fieldLabelClass} htmlFor={id}>{label}</label>
@@ -56,10 +61,10 @@ export function DebtField({ label, text, onChange, parsed, locale, hint, error, 
 
 export function Metric({ label, value, helper }: { label: string; value: string; helper?: string }) {
   return (
-    <div className="min-w-0 border border-line bg-panelSoft px-3 py-3">
-      <p className="text-[11px] font-semibold uppercase tracking-[0.12em] text-muted">{label}</p>
-      <p className="mt-2 break-words text-lg font-semibold leading-6 text-ink">{value}</p>
-      {helper ? <p className="mt-2 text-xs leading-5 text-muted">{helper}</p> : null}
+    <div className={styles.metric}>
+      <p>{label}</p>
+      <p>{value}</p>
+      {helper ? <p>{helper}</p> : null}
     </div>
   );
 }
