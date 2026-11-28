@@ -784,7 +784,15 @@ export function DiagnosticFlow({ initialMode, locale = "es", entryContent }: {
     setIndex((current) => current + 1);
   }
 
-  if (!started || !mode) return <div className="no-print" ref={entryFocus}>{entryContent}<StartScreen locale={locale} mode={mode} setMode={setMode} start={start} /></div>;
+  if (!started || !mode) {
+    return (
+      <div className="no-print" ref={entryFocus}>
+        {entryContent}
+        <StartScreen locale={locale} mode={mode} setMode={setMode} start={start} />
+        <DiagnosticReadingGuide locale={locale} compact />
+      </div>
+    );
+  }
   if (completed && validateDiagnosticAnswers(answers, mode).valid) return <ResultScreen answers={answers} locale={locale} mode={mode} restart={restart} review={() => { setCompleted(false); setIndex(0); }} />;
   if (!question) return null;
 

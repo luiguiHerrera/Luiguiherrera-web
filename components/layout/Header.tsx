@@ -200,12 +200,17 @@ function HeaderForPathname({ pathname }: { pathname: string }) {
   const isInvestorEntry = pathname === "/inversionista" || pathname === "/en/investor";
   const entryCtaHref = isInvestorEntry ? (locale === "en" ? "/en/dashboard" : "/dashboard") : hrefs.start;
   const entryCtaLabel = isInvestorEntry ? (locale === "en" ? "Open dashboard" : "Ver dashboard") : dictionary.layout.cta;
+  const debtHref = locale === "es" ? "/deudas" : "/en/debt";
+  const startMenuItems = dictionary.layout.startItems.flatMap<NavDropdownItem>((item) => {
+    if (isDiagnosticHref(item.href)) return [];
+    return item.href === debtHref ? [item, dictionary.layout.diagnosticMenuItem] : [item];
+  });
   const navGroups = [
     {
       href: hrefs.start,
       isActive: personalFinancePaths[locale].some((path) => pathMatches(pathname, path)),
       label: dictionary.layout.nav.start,
-      items: dictionary.layout.startItems,
+      items: startMenuItems,
     },
     { href: hrefs.investor, label: dictionary.layout.nav.investor, items: dictionary.layout.investorItems },
     { href: hrefs.research, label: dictionary.layout.nav.research, items: dictionary.layout.researchItems },

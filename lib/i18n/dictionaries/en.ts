@@ -12,6 +12,7 @@ export const en = {
       resources: "Resources",
       about: "About me",
     },
+    diagnosticMenuItem: { href: "/en/diagnostic", label: "Investor diagnostic", shortLabel: "Diagnostic", description: "Explore your financial capacity and risk tolerance. Choose the quick or full diagnostic." },
     startItems: [
       { href: "/en/diagnostic?mode=quick", label: "Quick diagnostic", shortLabel: "Quick", description: "Compact read on horizon, liquidity, tolerance and biases." },
       { href: "/en/diagnostic?mode=complete", label: "Full diagnostic", shortLabel: "Full", description: "Deeper assessment across capacity, goals, behavior and consistency." },

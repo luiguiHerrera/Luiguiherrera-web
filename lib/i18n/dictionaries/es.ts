@@ -12,6 +12,7 @@ export const es = {
       resources: "Recursos",
       about: "Sobre mí",
     },
+    diagnosticMenuItem: { href: "/diagnostico", label: "Diagnóstico del inversionista", shortLabel: "Diagnóstico", description: "Explora tu capacidad financiera y tolerancia al riesgo. Elige el modo rápido o completo." },
     startItems: [
       { href: "/diagnostico?mode=quick", label: "Diagnóstico rápido", shortLabel: "Rápido", description: "Lectura compacta de horizonte, liquidez, tolerancia y sesgos." },
       { href: "/diagnostico?mode=complete", label: "Diagnóstico completo", shortLabel: "Completo", description: "Evaluación más profunda por capacidad, objetivos, conducta y consistencia." },

@@ -21,11 +21,11 @@ const copy = {
   },
 };
 
-export function DiagnosticReadingGuide({ locale = "es" }: { locale?: DiagnosticLocale }) {
+export function DiagnosticReadingGuide({ locale = "es", compact = false }: { locale?: DiagnosticLocale; compact?: boolean }) {
   const text = copy[locale];
   return (
-    <details className="group mb-8 border-y border-line" data-diagnostic-guide="">
-      <summary className="flex cursor-pointer list-none items-center justify-between gap-6 py-5 text-sm font-semibold text-ink focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-petrol [&::-webkit-details-marker]:hidden">
+    <details className={compact ? "group mt-4 border-t border-line" : "group mb-8 border-y border-line"} data-diagnostic-guide="">
+      <summary className={`cursor-pointer list-none items-center focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-petrol [&::-webkit-details-marker]:hidden ${compact ? "inline-flex min-h-11 gap-2 text-xs font-medium text-muted" : "flex justify-between gap-6 py-5 text-sm font-semibold text-ink"}`}>
         {text.title}
         <span aria-hidden="true" className="text-xl font-normal text-brass transition-transform duration-200 group-open:rotate-45 motion-reduce:transition-none">+</span>
       </summary>

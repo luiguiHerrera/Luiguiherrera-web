@@ -1,5 +1,4 @@
 import { DiagnosticFlow } from "./DiagnosticFlow";
-import { DiagnosticReadingGuide } from "./DiagnosticReadingGuide";
 import type { DiagnosticLocale } from "@/lib/diagnostic/types";
 import styles from "./diagnostic.module.css";
 
@@ -40,7 +39,6 @@ export function DiagnosticPage({ locale, params }: { locale: DiagnosticLocale; p
             </div>
           </header>
           <p className={styles.privacy}>{text.note}</p>
-          <DiagnosticReadingGuide locale={locale} />
         </>
       } />
     </div>
