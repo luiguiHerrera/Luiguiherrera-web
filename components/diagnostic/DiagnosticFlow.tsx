@@ -413,9 +413,10 @@ function StartScreen({ locale, mode, setMode, start }: { locale: DiagnosticLocal
   const countLabel = (depth: DiagnosticMode) => {
     const counts = getQuestionCounts(depth);
     if (depth === "quick") return locale === "es" ? counts.base + " preguntas, hasta " + counts.maximum + " con adaptativas" : counts.base + " questions, up to " + counts.maximum + " with adaptive questions";
-    return locale === "es" ? counts.base + " base · hasta " + counts.maximum + " con adaptativas" : counts.base + " base · up to " + counts.maximum + " with adaptive questions";
+    return locale === "es" ? counts.base + " preguntas, hasta " + counts.maximum + " con adaptativas" : counts.base + " questions, up to " + counts.maximum + " with adaptive questions";
   };
   const quickDuration = locale === "es" ? "Tiempo estimado: 20–30 min" : "Estimated time: 20–30 min";
+  const fullDuration = locale === "es" ? "Tiempo estimado: 40–60 min" : "Estimated time: 40–60 min";
   return (
     <section className="warm-section border border-line p-5 md:p-7">
       <div className="grid gap-8 lg:grid-cols-[0.74fr_1.26fr] lg:items-start">
@@ -427,7 +428,7 @@ function StartScreen({ locale, mode, setMode, start }: { locale: DiagnosticLocal
         </div>
         <div className="grid gap-4 md:grid-cols-2">
           <ModeCard active={mode === "quick"} description={text.quickDescription} duration={quickDuration} onClick={() => setMode("quick")} questions={countLabel("quick")} title={text.quickTitle} />
-          <ModeCard active={mode === "complete"} description={text.fullDescription} onClick={() => setMode("complete")} questions={countLabel("complete")} title={text.fullTitle} />
+          <ModeCard active={mode === "complete"} description={text.fullDescription} duration={fullDuration} onClick={() => setMode("complete")} questions={countLabel("complete")} title={text.fullTitle} />
         </div>
       </div>
       <div className="mt-8 flex flex-col gap-4 border-t border-line pt-6 md:flex-row md:items-center md:justify-between">
