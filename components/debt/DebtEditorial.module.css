@@ -213,3 +213,9 @@
 
 .chartBody { position: relative; }
 .hoverCard { position: absolute; top: .7rem; z-index: 1; pointer-events: none; display: grid; max-width: 48%; gap: .25rem; padding: .6rem .8rem; border: 1px solid var(--debt-line); background: var(--debt-paper); color: var(--debt-title); box-shadow: 0 6px 20px #21362e18; font-size: .8rem; font-variant-numeric: tabular-nums; }
+
+.liquidityTable { width: 100%; table-layout: fixed; margin-top: .7rem; border-collapse: collapse; font-size: .84rem; }
+.liquidityTable :is(th, td) { padding: .5rem .35rem; overflow-wrap: anywhere; border-bottom: 1px solid var(--debt-line); }
+.liquidityTable :is(th, td):first-child { text-align: left; width: 48%; font-weight: 550; }
+.liquidityTable :is(th, td):not(:first-child) { text-align: right; font-variant-numeric: tabular-nums; }
+.liquidityTable th { color: var(--debt-title); }

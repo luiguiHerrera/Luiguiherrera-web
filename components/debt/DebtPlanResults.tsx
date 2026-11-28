@@ -7,6 +7,7 @@ import type { DebtCashFlowView, DebtCashMovement, DebtPlanAssessment, DebtPlanRe
 import type { BudgetLocale } from "@/lib/personal-finance/budget/types";
 import { Metric, fieldClass } from "./DebtFields";
 import { debtCopy } from "./debt-copy";
+import { debtIntegral } from "./debt-integral-copy";
 import { debtVisual } from "./debt-visual-copy";
 import styles from "./DebtEditorial.module.css";
 
@@ -299,12 +300,19 @@ export function ScenarioDifference({ reference, alternative, referenceAssessment
 export function MethodDifference({ result, locale, money }: { result: DebtPlanResult; locale: BudgetLocale; money: Money }) {
   const c = debtCopy[locale];
   const diff = compareDebtScenarios(result.avalanche, result.snowball);
+  const fees = result.avalanche.totals?.fees;
+  const snowballFees = result.snowball.totals?.fees;
+  const q = debtIntegral[locale];
   return (
     <div className="mt-4 border border-line bg-panelSoft p-4">
       <p className="text-sm font-semibold text-ink">{c.compareMethods}</p>
       <ScenarioDifference reference={result.avalanche} alternative={result.snowball}
         referenceAssessment={result.assessments.avalanche} alternativeAssessment={result.assessments.snowball}
         locale={locale} money={money} />
+      {diff.costDifference !== null && diff.costDifference < 0 && (
+        <p className="mt-3 text-sm text-muted">{fees !== undefined && snowballFees !== undefined && snowballFees < fees
+          ? q.feeFavorsSnowball : q.snowballContext}</p>
+      )}
       {diff.costDifference === BigInt(0) && diff.monthDifference === 0 ? <p className="mt-3 text-sm text-muted">{c.sameTotals}</p> : null}
     </div>
   );

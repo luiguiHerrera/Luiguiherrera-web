@@ -2,6 +2,7 @@
 
 import { useMemo, useRef, useState } from "react";
 import { calculateDebtPlan } from "@/lib/debt/calculate-debt-plan";
+import { contributionSources, type ContributionSource, type FundRelationship } from "@/lib/debt/extra-liquidity";
 import { MAX_ROWS, parseDebtMoney, parseDebtMonth, parseDebtRate } from "@/lib/debt/debt-input";
 import type { DebtInput, DebtKind, DebtProfileInput, ExtraContributionInput, PayoffMethod, RateType } from "@/lib/debt/types";
 import { supportedCurrencies, type BudgetCurrency, type BudgetLocale as Locale } from "@/lib/personal-finance/budget/types";
@@ -10,6 +11,8 @@ import { DebtField, Metric, debtFieldError, fieldClass, fieldLabelClass } from "
 import { formatDebtNumber, MethodDifference, PlanCard, ScenarioDifference, ScenarioReading } from "./DebtPlanResults";
 import { debtCopy } from "./debt-copy";
 import { BalanceFigure, CostFigure, FlowFigure, ScenarioMetrics, TimelineFigure, type PlotSeries } from "./DebtFigures";
+import { DebtLiquidityImpact } from "./DebtLiquidityImpact";
+import { debtIntegral } from "./debt-integral-copy";
 import { debtVisual } from "./debt-visual-copy";
 import { plotRatio } from "./debt-visual-data";
 import styles from "./DebtEditorial.module.css";
@@ -52,7 +55,7 @@ type ProfileDraft = Record<keyof DebtProfileInput, string>;
 type DebtDraft = Omit<DebtInput, "balance" | "annualRate" | "monthlyFee" | "minimumPayment"> & {
   balance: string; annualRate: string; monthlyFee: string; minimumPayment: string;
 };
-type ExtraDraft = Omit<ExtraContributionInput, "amount" | "monthNumber"> & { amount: string; monthNumber: string };
+type ExtraDraft = Omit<ExtraContributionInput, "amount" | "monthNumber"> & { amount: string; monthNumber: string; source: ContributionSource };
 
 type Scenario = "current" | "monthlyOnly" | "extrasOnly" | "combined";
 const scenarioOrder: Scenario[] = ["current", "monthlyOnly", "extrasOnly", "combined"];
@@ -75,11 +78,14 @@ function emptyDebt(id: string): DebtDraft {
 
 function parsePlanner(
   rawProfile: ProfileDraft, debts: DebtDraft[], extras: ExtraDraft[], currency: BudgetCurrency, locale: Locale,
-  paymentMode: "replacement" | "increase", paymentText: string,
+  paymentMode: "replacement" | "increase", paymentText: string, noDebts: boolean, relationship: FundRelationship,
 ) {
   const parse = (raw: string) => parseDebtMoney(raw, locale, currency);
   const parsedProfile = Object.fromEntries(profileFields.map(([key]) => [key, parse(rawProfile[key])]));
   const profile = Object.fromEntries(profileFields.map(([key]) => [key, parsedProfile[key].value])) as DebtProfileInput;
+  const inconsistentFund = relationship === "included" && profile.emergencyFund !== null
+    && profile.liquidNetWorth !== null && profile.emergencyFund > profile.liquidNetWorth;
+  const validatedProfile = inconsistentFund ? { ...profile, emergencyFund: null } : profile;
   const parsedDebts = debts.map(d => {
     const balance = parse(d.balance);
     const annualRate = parseDebtRate(d.rateType === "unknown" ? "" : d.annualRate, locale);
@@ -90,42 +96,48 @@ function parsePlanner(
       && minimum.value !== null && fee.value !== null && minimum.value < fee.value;
     return { d, balance, annualRate, fee, minimum, active, mismatch };
   });
-  const modelDebts = parsedDebts.filter(item => item.active).map(({ d, balance, annualRate, fee, minimum }): DebtInput => ({
+  const knownDebts = parsedDebts.filter(item => item.active).map(({ d, balance, annualRate, fee, minimum }): DebtInput => ({
     ...d, balance: balance.value, annualRate: annualRate.value, monthlyFee: fee.value, minimumPayment: minimum.value,
   }));
+  // An untouched ledger is unknown. Only explicit confirmation represents an empty portfolio.
+  const modelDebts = knownDebts.length || noDebts ? knownDebts : [{
+    ...emptyDebt("unreported"), balance: null, annualRate: null, monthlyFee: null, minimumPayment: null,
+  }];
   const parsedExtras = extras.map(e => ({ e, amount: parse(e.amount), month: parseDebtMonth(e.monthNumber) }));
   const modelExtras = parsedExtras
     .filter(({ e }) => e.amount.trim() || e.monthNumber.trim() || e.label?.trim())
-    .map(({ e, amount, month }): ExtraContributionInput => ({ ...e, amount: amount.value, monthNumber: month.value }));
+    .map(({ e, amount, month }): ExtraContributionInput => ({ id: e.id, label: e.label, amount: amount.value, monthNumber: month.value }));
   const parsedPayment = parse(paymentText);
   const baseBudget = profile.availableDebtPayment;
   const newBudget = parsedPayment.value === null ? null :
     paymentMode === "replacement" ? parsedPayment.value :
     baseBudget === null ? null : baseBudget + parsedPayment.value;
   const rangeError = newBudget !== null && !Number.isSafeInteger(newBudget);
-  const alternate = { ...profile, availableDebtPayment: rangeError ? null : newBudget };
+  const alternate = { ...validatedProfile, availableDebtPayment: rangeError ? null : newBudget };
   const debtError = parsedDebts.some(({ balance, annualRate, fee, minimum, mismatch }) => balance.error || annualRate.error || fee.error || minimum.error || mismatch);
   const extraError = parsedExtras.some(({ amount, month }) => amount.error || month.error);
   const baseError = Boolean(parsedProfile.availableDebtPayment.error);
   const alternativeError = Boolean(parsedPayment.error) || rangeError || (paymentMode === "increase" && baseError);
   const invalidSummaryInputs = { debts: debtError, ordinaryExpenses: Boolean(parsedProfile.fixedMonthlyExpenses.error) };
   const scenarioResults = {
-    current: calculateDebtPlan(profile, modelDebts, { invalidSummaryInputs, invalidProjectionInput: debtError || baseError }),
+    current: calculateDebtPlan(validatedProfile, modelDebts, { invalidSummaryInputs, invalidProjectionInput: debtError || baseError }),
     monthlyOnly: paymentText.trim()
       ? calculateDebtPlan(alternate, modelDebts, { invalidSummaryInputs, invalidProjectionInput: debtError || alternativeError }) : null,
     extrasOnly: modelExtras.length
-      ? calculateDebtPlan(profile, modelDebts, { extraContributions: modelExtras, invalidSummaryInputs, invalidProjectionInput: debtError || extraError || baseError }) : null,
+      ? calculateDebtPlan(validatedProfile, modelDebts, { extraContributions: modelExtras, invalidSummaryInputs, invalidProjectionInput: debtError || extraError || baseError }) : null,
     combined: paymentText.trim() && modelExtras.length
       ? calculateDebtPlan(alternate, modelDebts, { extraContributions: modelExtras, invalidSummaryInputs, invalidProjectionInput: debtError || extraError || alternativeError }) : null,
   };
   const hasInvalid = Object.values(parsedProfile).some(item => item.error) || debtError || extraError || alternativeError;
-  return { parsedProfile, parsedDebts, parsedExtras, parsedPayment, rangeError, hasInvalid, profile, alternate, scenarioResults };
+  return { parsedProfile, parsedDebts, parsedExtras, parsedPayment, rangeError, hasInvalid, profile, inconsistentFund, scenarioResults };
 }
 
 export function DebtPlanner({ locale }: { locale: Locale }) {
   const c = debtCopy[locale];
   const v = debtVisual[locale];
-  const [currency, setCurrency] = useState<BudgetCurrency>(locale === "es" ? "EUR" : "USD");
+  const q = debtIntegral[locale];
+  const defaultCurrency = locale === "es" ? "EUR" : "USD";
+  const [currency, setCurrency] = useState<BudgetCurrency>(defaultCurrency);
   const [rawProfile, setProfile] = useState<ProfileDraft>(initialProfile);
   const [debts, setDebts] = useState<DebtDraft[]>([emptyDebt("debt-1")]);
   const [extras, setExtras] = useState<ExtraDraft[]>([]);
@@ -135,9 +147,12 @@ export function DebtPlanner({ locale }: { locale: Locale }) {
   const [cashPeriod, setCashPeriod] = useState(1);
   const [paymentMode, setPaymentMode] = useState<"replacement" | "increase">("replacement");
   const [paymentText, setPaymentText] = useState("");
+  const [noDebts, setNoDebts] = useState(false);
+  const [relationship, setRelationship] = useState<FundRelationship>("unknown");
+  const [revision, setRevision] = useState(0);
   const id = useRef(1);
-  const model = useMemo(() => parsePlanner(rawProfile, debts, extras, currency, locale, paymentMode, paymentText),
-    [rawProfile, debts, extras, currency, locale, paymentMode, paymentText]);
+  const model = useMemo(() => parsePlanner(rawProfile, debts, extras, currency, locale, paymentMode, paymentText, noDebts, relationship),
+    [rawProfile, debts, extras, currency, locale, paymentMode, paymentText, noDebts, relationship]);
   const result = model.scenarioResults.current;
   const alternatives = scenarioOrder.filter(key => key !== "current" && model.scenarioResults[key] !== null);
   const effectiveScenario = scenario !== "current" && model.scenarioResults[scenario] ? scenario : alternatives[0] ?? "current";
@@ -146,10 +161,21 @@ export function DebtPlanner({ locale }: { locale: Locale }) {
   const format = (value: bigint | number | null) => value === null ? "—" : formatMoney(value, locale, currency);
   const pct = (value: number | null) => formatDebtNumber(value, locale, "percent");
   const annual = (value: number | null) => pct(value === null ? null : value / 100);
-  const traceScenario = effectiveScenario === "combined" ? "combined" : "extrasOnly";
-  const traceResult = model.scenarioResults[traceScenario];
+  const traceResult = effectiveScenario === "combined" || effectiveScenario === "extrasOnly" ? viewedResult : null;
+  const sources = Object.fromEntries(extras.map(entry => [entry.id, entry.source]));
   const trace = traceResult?.[method].contributions ?? [];
   const lastPeriod = result[method].ledger.length;
+  const hasDebtFields = model.parsedDebts.some(entry => entry.active);
+  const hasEntries = noDebts || hasDebtFields || Object.values(rawProfile).some(s => s.trim())
+    || paymentText.trim().length > 0 || extras.some(entry => entry.amount.trim() || entry.monthNumber.trim() || entry.label?.trim());
+  const hasDraft = hasEntries || currency !== defaultCurrency || relationship !== "unknown"
+    || debts.length !== 1 || extras.length > 0 || paymentMode !== "replacement" || method !== "avalanche"
+    || debts.some(entry => entry.type !== "card" || entry.rateType !== "nominal" || !entry.minimumIncludesFees);
+  const state = !hasEntries ? "empty" : noDebts ? "none" : result[method].status === "no-debt" ? "settled"
+    : lastPeriod ? "valid" : "incomplete";
+  const showAnalysis = state !== "empty";
+  const validScenario = viewedResult[method].ledger.length > 0;
+  const observeMethod = (value: string) => setMethod(value as PayoffMethod);
   const cashIndex = Math.min(cashPeriod, lastPeriod || 1) - 1;
   const cash = result.assessments[method].periods[cashIndex] ?? result.assessments[method].initialCashFlow;
   const { summary } = result;
@@ -186,17 +212,58 @@ export function DebtPlanner({ locale }: { locale: Locale }) {
   }
   function addExtra() {
     const key = `extra-${++id.current}`;
-    setExtras(all => all.length < MAX_ROWS ? [...all, { id: key, label: "", monthNumber: "", amount: "" }] : all);
+    setExtras(all => all.length < MAX_ROWS ? [...all, { id: key, label: "", monthNumber: "", amount: "", source: "unknown" }] : all);
+  }
+
+  function replaceDraft(example: boolean) {
+    if (hasDraft && !window.confirm(example ? q.confirmExample : q.confirmReset)) return;
+    setNoDebts(false);
+    setCurrency(defaultCurrency);
+    setMethod("avalanche");
+    setCashPeriod(1);
+    setPaymentMode("replacement");
+    setRevision(value => value + 1);
+    if (example) {
+      id.current = 4;
+      setOpenDebts(new Set());
+      setRelationship("included");
+      setProfile({ liquidNetWorth: "12000", monthlyNetIncome: "3200", fixedMonthlyExpenses: "1500", emergencyFund: "5500", availableDebtPayment: "450" });
+      setDebts([
+        { ...emptyDebt("debt-1"), name: q.exampleCard, balance: "4500", annualRate: "22", minimumPayment: "140", monthlyFee: "5", minimumIncludesFees: false },
+        { ...emptyDebt("debt-2"), name: q.exampleLoan, type: "personal", balance: "950", annualRate: "12", rateType: "effective", minimumPayment: "85", monthlyFee: "45" },
+      ]);
+      setExtras([
+        { id: "extra-3", label: q.exampleReserve, monthNumber: "2", amount: "1200", source: "reserve" },
+        { id: "extra-4", label: q.exampleFuture, monthNumber: "3", amount: "300", source: "future" },
+      ]);
+      setPaymentText("650");
+      setScenario("combined");
+    } else {
+      id.current = 1;
+      setOpenDebts(new Set(["debt-1"]));
+      setRelationship("unknown");
+      setProfile(initialProfile);
+      setDebts([emptyDebt("debt-1")]);
+      setExtras([]);
+      setPaymentText("");
+      setScenario("current");
+    }
   }
 
   return (
-    <div className={styles.workbench}>
+    <div key={revision} className={styles.workbench}>
       <nav className={styles.navigation} aria-label={v.areas}>
         {areas.map(([id, label]) => <a key={id} href={`#${id}`}>{label}</a>)}
       </nav>
 
       <section id="estructura" className={styles.section} aria-labelledby="estructura-titulo">
-        <h2 id="estructura-titulo" className={styles.sectionHeading}>{v.structure}</h2>
+        <div className="flex flex-wrap items-start justify-between gap-3">
+          <h2 id="estructura-titulo" className={styles.sectionHeading}>{v.structure}</h2>
+          <div className="flex flex-wrap gap-2">
+            <button type="button" className={secondary} onClick={() => replaceDraft(true)}>{q.example}</button>
+            <button type="button" className={secondary} onClick={() => replaceDraft(false)}>{q.reset}</button>
+          </div>
+        </div>
         <div className="mt-5 grid items-start gap-5 lg:grid-cols-[1.7fr_1fr]">
           <fieldset className="min-w-0">
             <legend className={styles.subhead}>{v.flows}</legend>
@@ -211,10 +278,18 @@ export function DebtPlanner({ locale }: { locale: Locale }) {
             <legend className={styles.subhead}>{v.balances}</legend>
             <div className="grid items-start gap-3 sm:grid-cols-2">
               {profileFields.filter(([key]) => key === "liquidNetWorth" || key === "emergencyFund").map(([key, label]) => (
-                <DebtField key={key} label={c[label]} locale={locale}
+                <DebtField key={key} label={key === "liquidNetWorth" ? q.liquidAssets : c[label]} locale={locale}
                   parsed={model.parsedProfile[key]} text={rawProfile[key]} onChange={text => setProfile(old => ({ ...old, [key]: text }))} />
               ))}
             </div>
+            <p className={styles.figureSub}>{q.assetHelp}</p>
+            <label className="mt-3 grid gap-1 text-sm">
+              {q.relationship}
+              <select className={fieldClass} value={relationship} onChange={e => setRelationship(e.target.value as FundRelationship)}>
+                {(["unknown", "included", "separate"] as const).map(value => <option key={value} value={value}>{q[value]}</option>)}
+              </select>
+            </label>
+            {model.inconsistentFund && <p role="status" className={styles.warning}>{q.relationshipError}</p>}
           </fieldset>
         </div>
         <div className="mt-4 grid items-center gap-2 sm:grid-cols-[7.5rem_1fr]">
@@ -231,18 +306,23 @@ export function DebtPlanner({ locale }: { locale: Locale }) {
       <section id="obligaciones" className={styles.section} aria-labelledby="obligaciones-titulo">
         <div className="flex flex-wrap items-center justify-between gap-3">
           <h2 id="obligaciones-titulo" className={styles.sectionHeading}>{v.obligations}</h2>
-          <button type="button" className={primary} disabled={debts.length >= MAX_ROWS} onClick={addDebt}>{c.addDebt}</button>
+          <button type="button" className={primary} disabled={noDebts || debts.length >= MAX_ROWS} onClick={addDebt}>{c.addDebt}</button>
         </div>
-        <div className={styles.metrics}>
+        <label className="mt-4 flex items-start gap-2 text-sm">
+          <input className="mt-1" type="checkbox" checked={noDebts} disabled={hasDebtFields} onChange={e => setNoDebts(e.target.checked)} />
+          {q.noDebts}
+        </label>
+        {hasDebtFields && <p className={styles.figureSub}>{q.noDebtsHelp}</p>}
+        {state === "empty" ? <p className={styles.chartEmpty}>{q.empty}</p> : <div className={styles.metrics}>
           <Metric label={c.totalDebt} value={format(summary.totalDebt)} />
           <Metric label={minimumsArePartial ? c.knownMinimums : c.totalMinimum}
             value={minimumsArePartial ? `${c.atLeast} ${format(summary.minimumsLowerBound)}` : format(summary.monthlyMinimums)} />
-        </div>
+        </div>}
         <datalist id={`debt-name-suggestions-${locale}`}>
           {debtNameSuggestions[locale].map(name => <option key={name} value={name} />)}
         </datalist>
         <div className="grid gap-3">
-          {model.parsedDebts.map(({ d, balance, annualRate, fee, minimum, mismatch, active }) => {
+          {!noDebts && model.parsedDebts.map(({ d, balance, annualRate, fee, minimum, mismatch, active }) => {
             const type = debtTypes.find(type => type.value === d.type)?.label[locale];
             const warningMessages = [
               [c.balance, debtFieldError(balance, locale)], [c.rate, debtFieldError(annualRate, locale)],
@@ -320,7 +400,7 @@ export function DebtPlanner({ locale }: { locale: Locale }) {
               </li>)}
             </ul>
           </figure>
-        ) : summary.totalDebt === null ? <p className={styles.figureSub}>{v.partialComposition}</p> : null}
+        ) : hasDebtFields && summary.totalDebt === null ? <p className={styles.figureSub}>{v.partialComposition}</p> : null}
         <details className={styles.fold}>
           <summary>{c.references}</summary>
           <p className="mt-3 max-w-3xl text-sm leading-6 text-muted">{c.referenceBody}</p>
@@ -341,13 +421,22 @@ export function DebtPlanner({ locale }: { locale: Locale }) {
       <section id="capacidad" className={styles.section} aria-labelledby="capacidad-titulo">
         <div className="flex flex-wrap items-start justify-between gap-3">
           <h2 id="capacidad-titulo" className={styles.sectionHeading}>{v.capacity}</h2>
+          <div className="flex flex-wrap gap-3">
+            <label className="grid gap-1 text-sm">{q.strategy}
+              <select className={fieldClass} value={method} onChange={e => observeMethod(e.target.value)}>
+                {methods.map(({ plan, label }) => <option key={plan.method} value={plan.method}>{label}</option>)}
+              </select>
+            </label>
           {lastPeriod > 0 && <label className="grid gap-1 text-sm">
             {v.periodPicker}
             <select className={fieldClass} value={cashIndex + 1} onChange={e => setCashPeriod(Number(e.target.value))}>
               {result[method].ledger.map(period => <option key={period.month} value={period.month}>{c.month} {period.month}</option>)}
             </select>
           </label>}
+          </div>
         </div>
+        <p role="status" className={state === "empty" ? styles.chartEmpty : styles.figureSub}>{q[state]}{state === "valid" ? ` · ${q.observed} ${c[method]}` : ""}</p>
+        {showAnalysis && <>
         <div className={styles.metrics}>
           <Metric label={c.totalDebt} value={format(summary.totalDebt)} />
           <Metric label={minimumsArePartial ? c.knownMinimums : c.totalMinimum}
@@ -370,15 +459,16 @@ export function DebtPlanner({ locale }: { locale: Locale }) {
             <Metric label={c.debtToIncome} value={pct(summary.minimumsToIncome)} />
             <Metric label={c.plannedToIncome} value={pct(summary.plannedDebtToIncomeRatio)} />
             <Metric label={c.expensesToIncome} value={pct(summary.fixedAndMinimumsToIncome)} />
-            <Metric label={c.debtToLiquidity} value={pct(summary.debtToLiquidNetWorth)} />
+            <Metric label={c.debtToLiquidity} value={pct(summary.debtToLiquidNetWorth)} helper={q.ratioHelp} />
           </div>
           <p className="text-sm text-muted">{summary.debtLoadStatus === "incomplete" ? c.unknown : c[summary.debtLoadStatus]}. {c.ratioNote}</p>
         </details>
+        </>}
       </section>
 
       <section id="estrategias" className={styles.section} aria-labelledby="estrategias-titulo">
         <h2 id="estrategias-titulo" className={styles.sectionHeading}>{v.strategies}</h2>
-        <div className="mt-4 grid gap-3">
+        {lastPeriod ? <div className="mt-4 grid gap-3">
           <BalanceFigure series={methods} locale={locale} money={format} currency={currency} title={v.balanceChart} />
           <div className={styles.split}>
             <CostFigure series={methods} locale={locale} money={format} />
@@ -388,7 +478,7 @@ export function DebtPlanner({ locale }: { locale: Locale }) {
           <div className={styles.split}>
             {methods.map(({ plan }) => <PlanCard key={plan.method} plan={plan} assessment={result.assessments[plan.method]} locale={locale} names={names} money={format} />)}
           </div>
-        </div>
+        </div> : <p className={styles.chartEmpty}>{q[state]}</p>}
       </section>
 
       <section id="escenarios" className={styles.section} aria-labelledby="escenarios-titulo">
@@ -414,21 +504,27 @@ export function DebtPlanner({ locale }: { locale: Locale }) {
         {model.parsedExtras.length === 0 ? <p className="mt-2 text-sm text-muted">{c.noExtras}</p> : null}
         <div className="mt-3 grid gap-3">
           {model.parsedExtras.map(({ e, amount, month }) => (
-            <div key={e.id} className="grid items-start gap-3 border border-line bg-panelSoft p-3 md:grid-cols-[1fr_1fr_1.4fr_auto]">
+            <div key={e.id} className="grid items-start gap-3 border border-line bg-panelSoft p-3 lg:grid-cols-[.7fr_.85fr_1.4fr_1.4fr_auto]">
               <DebtField label={c.month} text={e.monthNumber} parsed={month} locale={locale} mode="numeric" onChange={text => updateExtra(e.id, { monthNumber: text })} />
               <DebtField label={c.amount} text={e.amount} parsed={amount} locale={locale} onChange={text => updateExtra(e.id, { amount: text })} />
               <label className="grid min-w-0 gap-2">
                 <span className={fieldLabelClass}>{c.concept}</span>
                 <input className={fieldClass} value={e.label} onChange={event => updateExtra(e.id, { label: event.target.value })} />
               </label>
-              <button type="button" className={`${secondary} w-fit md:mt-6`} onClick={() => setExtras(all => all.filter(row => row.id !== e.id))}>{c.remove}</button>
+              <label className="grid min-w-0 gap-2">
+                <span className={fieldLabelClass}>{q.source}</span>
+                <select className={fieldClass} value={e.source} onChange={event => updateExtra(e.id, { source: event.target.value as ContributionSource })}>
+                  {contributionSources.map(value => <option key={value} value={value}>{q[value]}</option>)}
+                </select>
+              </label>
+              <button type="button" className={`${secondary} w-fit lg:mt-6`} onClick={() => setExtras(all => all.filter(row => row.id !== e.id))}>{c.remove}</button>
             </div>
           ))}
         </div>
         <div className="mt-5 grid gap-3 border-t border-line pt-4 sm:grid-cols-2">
           <label className="grid min-w-0 gap-2">
             <span className={fieldLabelClass}>{v.chooseMethod}</span>
-            <select className={fieldClass} value={method} onChange={event => setMethod(event.target.value as PayoffMethod)}>
+            <select className={fieldClass} value={method} onChange={event => observeMethod(event.target.value)}>
               {methods.map(({ plan, label }) => <option key={plan.method} value={plan.method}>{label}</option>)}
             </select>
           </label>
@@ -441,7 +537,7 @@ export function DebtPlanner({ locale }: { locale: Locale }) {
           </label>
         </div>
         {alternatives.length === 0 && <p className={styles.figureSub}>{v.scenarioPrompt}</p>}
-        <div className="mt-4 grid gap-3">
+        {lastPeriod || validScenario ? <div className="mt-4 grid gap-3">
           <BalanceFigure series={scenarios} locale={locale} money={format} currency={currency} title={v.scenarioChart} />
           <div className={styles.split}>
             <CostFigure series={scenarios} locale={locale} money={format} />
@@ -449,7 +545,7 @@ export function DebtPlanner({ locale }: { locale: Locale }) {
               <ScenarioMetrics series={scenarios.map(({ plan, label }, index) => ({
                 plan, label, flow: (index ? viewedResult : result).assessments[method].initialCashFlow,
               }))} locale={locale} money={format} />
-              {effectiveScenario !== "current" ? (
+              {effectiveScenario !== "current" && lastPeriod > 0 && validScenario ? (
                 <ScenarioDifference reference={result[method]} alternative={viewedResult[method]}
                   referenceAssessment={result.assessments[method]} alternativeAssessment={viewedResult.assessments[method]}
                   locale={locale} money={format} />
@@ -465,14 +561,16 @@ export function DebtPlanner({ locale }: { locale: Locale }) {
               <PlanCard plan={viewedResult[method]} assessment={viewedResult.assessments[method]} locale={locale} names={names} money={format} />
             </div>
           ) : null}
-        </div>
+        </div> : <p className={styles.chartEmpty}>{q[state]}</p>}
+        <DebtLiquidityImpact profile={model.profile} result={traceResult} method={method}
+          relationship={relationship} sources={sources} locale={locale} money={format} />
         {trace.length ? (
           <details className={styles.fold}>
-            <summary>{c.additional} · {c[traceScenario]}</summary>
+            <summary>{c.additional} · {c[effectiveScenario]}</summary>
             <ul className="mt-2 grid gap-3 text-sm text-muted">
               {trace.map(e => (
                 <li key={e.id} className="min-w-0 break-words border-t border-line pt-2">
-                  <p className="font-semibold text-ink">{c.month} {e.month}{e.label ? ` · ${e.label}` : ""}</p>
+                  <p className="font-semibold text-ink">{c.month} {e.month}{e.label ? ` · ${e.label}` : ""} · {q[sources[e.id] ?? "unknown"]}</p>
                   <p>{c.planned} {format(e.planned)} · {c.applied} {format(e.applied)} · {c.unused} {format(e.unused)}</p>
                   <p>{c.outside} {format(e.outsideHorizon)} · {c.unsimulated} {format(e.unsimulated)}</p>
                 </li>
