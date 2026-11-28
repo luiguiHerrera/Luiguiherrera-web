@@ -92,7 +92,7 @@ const faq = {
     ["¿Qué diferencia hay entre Educación y SER?", "Educación agrupa recursos destinados a desarrollar capacidades profesionales, como formación, idiomas o herramientas de trabajo. SER agrupa recursos destinados a cuidar, recuperar o fortalecer tu bienestar personal. Ninguna de las dos categorías garantiza un resultado concreto."],
     ["¿Qué incluye SER y Donación?", "SER y Donación permite reservar recursos para bienestar personal y, cuando forme parte de tus valores o compromisos, para contribuir a otras personas, comunidades o causas. El desglose es opcional y no existe un porcentaje mínimo universal."],
     ["¿Puedo dejar una categoría en cero?", "Sí. La herramienta no obliga a asignar dinero a todas las categorías. Sin embargo, mostrará una advertencia matemática si Básicos y compromisos no cubre los gastos y pagos mínimos introducidos, o si ALP queda por debajo de la base mensual calculada según los datos y objetivos que hayas definido."],
-    ["¿Se guardan mis porcentajes y objetivos?", "No. Los datos financieros y objetivos se procesan directamente en tu navegador. No los guardamos ni los enviamos a nuestros servidores. Al recargar la página, el estado del simulador se reinicia."],
+    ["¿Se guardan mis porcentajes y objetivos?", "No. Los datos financieros y objetivos se procesan directamente en tu navegador. No se guardan ni se envían a servidores. Al recargar la página, el estado del simulador se reinicia."],
     ["¿El simulador decide qué distribución debo elegir?", "No. El simulador calcula importes, equivalencias, límites y diferencias. Tú decides la distribución objetivo. El resultado es educativo y no constituye asesoramiento financiero personalizado."],
   ],
   en: [
@@ -104,7 +104,7 @@ const faq = {
     ["What is the difference between Education and SER?", "Education covers resources used to develop professional skills, such as courses, languages, or work tools. SER covers resources used to support, restore, or strengthen personal well-being. Neither category guarantees a specific outcome."],
     ["What is included in SER and Giving?", "SER and Giving lets you set aside resources for personal well-being and, when it reflects your values or commitments, for contributing to other people, communities, or causes. The breakdown is optional, and there is no universal minimum percentage."],
     ["Can I leave a category at zero?", "Yes. The tool does not require an allocation to every category. It will, however, show a mathematical warning when Essentials and commitments does not cover the expenses and minimum payments entered, or when ALP is below the monthly amount calculated from the data and targets you defined."],
-    ["Are my percentages and targets stored?", "No. Your financial data and targets are processed directly in your browser. We do not store them or send them to our servers. Reloading the page resets the simulator."],
+    ["Are my percentages and targets stored?", "No. Your financial data and targets are processed directly in your browser. They are not stored or sent to servers. Reloading the page resets the simulator."],
     ["Does the simulator decide which allocation I should choose?", "No. The simulator calculates amounts, equivalents, constraints, and differences. You choose the target allocation. The result is educational and does not constitute personalized financial advice."],
   ],
 } satisfies Record<BudgetLocale, Array<[string, string]>>;

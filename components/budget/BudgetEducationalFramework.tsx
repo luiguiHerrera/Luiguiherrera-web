@@ -1,4 +1,3 @@
-import Link from "next/link";
 import styles from "./BudgetEditorial.module.css";
 import { budgetCompositionColors } from "./BudgetComposition";
 import { budgetTargetCopy } from "@/components/budget/budget-target-copy";
@@ -49,12 +48,11 @@ const frameworkCopy = {
     intro: "Comprende las seis categorías y construye una distribución propia sin seguir una regla universal.",
     neutral: "La herramienta describe tus datos y decisiones. No califica categorías ni promete resultados.",
     privacy: "Tus datos se procesan en este dispositivo. No se guardan ni se envían.",
-    resources: "Recursos relacionados con el presupuesto",
     rule: {
       detail: "Las seis categorías utilizan el mismo ingreso. Puedes explorar por debajo o por encima del 100 %, y la herramienta mostrará lo pendiente o el exceso sin redistribuir nada automáticamente. El 100 % describe un estado de distribución, no una respuesta universalmente correcta.",
       title: "La regla del 100 %",
     },
-    title: "Del punto de partida a una distribución propia",
+    title: "De 0 a una distribución propia",
   },
   en: {
     alpClf: {
@@ -96,12 +94,11 @@ const frameworkCopy = {
     intro: "Understand the six categories and build your own allocation without following a universal rule.",
     neutral: "The tool describes your data and decisions. It does not rate categories or promise outcomes.",
     privacy: "Your data is processed on this device. It is not stored or sent anywhere.",
-    resources: "Budget-related resources",
     rule: {
       detail: "The six categories use the same income. You can explore below or above 100%, and the tool will show the unallocated share or excess without redistributing anything automatically. A 100% allocation describes a distribution state, not a universally correct answer.",
       title: "The 100% rule",
     },
-    title: "From your starting point to your own allocation",
+    title: "From zero to an allocation of your own",
   },
 } satisfies Record<BudgetLocale, {
   alpClf: Record<"action" | "alpDetail" | "alpPurpose" | "clfDetail" | "clfPurpose" | "close" | "detail" | "title", string>;
@@ -112,7 +109,6 @@ const frameworkCopy = {
   intro: string;
   neutral: string;
   privacy: string;
-  resources: string;
   rule: Record<"detail" | "title", string>;
   title: string;
 }>;
@@ -217,12 +213,6 @@ export function BudgetEducationalFramework({ locale }: { locale: BudgetLocale })
         <p>{labels.neutral}</p>
         <p className="mt-1">{labels.privacy}</p>
       </div>
-
-      <nav aria-label={labels.resources} className="mt-5 flex flex-wrap gap-x-5 gap-y-3 text-sm font-semibold">
-        <Link className="text-petrol underline-offset-4 hover:underline" href={locale === "es" ? "/empezar" : "/en/start"}>{locale === "es" ? "Empezar" : "Start here"}</Link>
-        <Link className="text-petrol underline-offset-4 hover:underline" href={locale === "es" ? "/deudas" : "/en/debt"}>{locale === "es" ? "Revisar deudas" : "Review debt"}</Link>
-        <Link className="text-petrol underline-offset-4 hover:underline" href={locale === "es" ? "/metodologia" : "/en/methodology"}>{locale === "es" ? "Consultar metodología" : "Read the methodology"}</Link>
-      </nav>
     </section>
   );
 }
