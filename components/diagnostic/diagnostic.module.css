@@ -358,3 +358,16 @@
 @media print {
   .shell { width: 100%; max-width: none; margin: 0; padding: 0; }
 }
+
+.reviewPanel {
+  display: grid;
+  gap: 8px;
+  max-width: 1100px;
+  margin: 25px auto 0;
+  padding: 15px;
+  border: 1px dashed #9a8355;
+  background: var(--wash);
+}
+.reviewPanel > div { display: flex; flex-wrap: wrap; gap: 8px; }
+.reviewPanel a { display: inline-block; min-height: 44px; padding: 10px; text-decoration: underline; text-underline-offset: 3px; }
+.reviewPanel a[aria-current="page"] { background: var(--forest); color: var(--white); }

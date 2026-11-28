@@ -721,14 +721,15 @@ function ResultScreen({ answers, locale, mode, restart, review }: { answers: Dia
   );
 }
 
-export function DiagnosticFlow({ initialMode, locale = "es", entryContent }: {
+export function DiagnosticFlow({ initialMode, locale = "es", entryContent, reviewSample }: {
   initialMode?: DiagnosticMode; locale?: DiagnosticLocale; entryContent?: ReactNode;
+  reviewSample?: { mode: DiagnosticMode; answers: DiagnosticAnswers };
 }) {
-  const [mode, setMode] = useState<DiagnosticMode | undefined>(initialMode);
-  const [started, setStarted] = useState(Boolean(initialMode));
+  const [mode, setMode] = useState<DiagnosticMode | undefined>(reviewSample?.mode ?? initialMode);
+  const [started, setStarted] = useState(Boolean(reviewSample || initialMode));
   const [index, setIndex] = useState(0);
-  const [answers, setAnswers] = useState<DiagnosticAnswers>({});
-  const [completed, setCompleted] = useState(false);
+  const [answers, setAnswers] = useState<DiagnosticAnswers>(reviewSample?.answers ?? {});
+  const [completed, setCompleted] = useState(Boolean(reviewSample));
   const questions = useMemo(() => mode ? getQuestionsForMode(mode, answers) : [], [answers, mode]);
   const safeIndex = Math.min(index, Math.max(0, questions.length - 1));
   const question = questions[safeIndex];
