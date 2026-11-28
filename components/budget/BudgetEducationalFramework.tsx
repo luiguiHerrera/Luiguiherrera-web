@@ -45,14 +45,15 @@ const frameworkCopy = {
       title: "Fondo de emergencia y reserva",
       contribution: "Aporte mensual",
     },
-    intro: "Comprende las seis categorías y construye una distribución propia sin seguir una regla universal.",
+    intro: "Comprende las seis categorías sugeridas y construye una distribución propia sin seguir una regla universal.",
     neutral: "La herramienta describe tus datos y decisiones. No califica categorías ni promete resultados.",
     privacy: "Tus datos se procesan en este dispositivo. No se guardan ni se envían.",
     rule: {
       detail: "Las seis categorías utilizan el mismo ingreso. Puedes explorar por debajo o por encima del 100 %, y la herramienta mostrará lo pendiente o el exceso sin redistribuir nada automáticamente. El 100 % describe un estado de distribución, no una respuesta universalmente correcta.",
       title: "La regla del 100 %",
     },
-    title: "De 0 a una distribución propia",
+    serGivingTitle: "Ser/Donación",
+    title: "De cero a una distribución propia",
   },
   en: {
     alpClf: {
@@ -91,13 +92,14 @@ const frameworkCopy = {
       title: "Emergency fund and reserve",
       contribution: "Monthly contribution",
     },
-    intro: "Understand the six categories and build your own allocation without following a universal rule.",
+    intro: "Understand the six suggested categories and build your own allocation without following a universal rule.",
     neutral: "The tool describes your data and decisions. It does not rate categories or promise outcomes.",
     privacy: "Your data is processed on this device. It is not stored or sent anywhere.",
     rule: {
       detail: "The six categories use the same income. You can explore below or above 100%, and the tool will show the unallocated share or excess without redistributing anything automatically. A 100% allocation describes a distribution state, not a universally correct answer.",
       title: "The 100% rule",
     },
+    serGivingTitle: "Ser/Giving",
     title: "From zero to an allocation of your own",
   },
 } satisfies Record<BudgetLocale, {
@@ -110,6 +112,7 @@ const frameworkCopy = {
   neutral: string;
   privacy: string;
   rule: Record<"detail" | "title", string>;
+  serGivingTitle: string;
   title: string;
 }>;
 
@@ -138,7 +141,7 @@ export function BudgetEducationalFramework({ locale }: { locale: BudgetLocale })
           return (
             <details className={`group ${styles.frameworkCard}`} key={category} style={{ borderTopColor: budgetCompositionColors[index] }}>
               <summary className={summaryClassName}>
-                <h3 className="font-semibold leading-6 text-ink">{categoryLabels.name}</h3>
+                <h3 className="font-semibold leading-6 text-ink">{category === "serAndGiving" ? labels.serGivingTitle : categoryLabels.name}</h3>
                 <p className="mt-2 text-sm leading-5 text-muted">{labels.categoryFunctions[category]}</p>
                 <span className="mt-3 flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.08em] text-petrol">
                   <span aria-hidden="true" className="h-2 w-2 rounded-full" style={{ backgroundColor: budgetCompositionColors[index] }} />
