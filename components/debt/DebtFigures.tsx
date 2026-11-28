@@ -78,7 +78,8 @@ export function BalanceFigure({ series, locale, money, currency, title }: {
   const month = Math.min(end, hovered ?? selected ?? end);
   const x = (value: number) => end ? 12 + 976 * value / end : 12;
   const y = (value: bigint) => 247 - 232 * plotRatio(value, peak);
-  const ticks = peak ? [4, 3, 2, 1, 0].map(n => peak * BigInt(n) / BigInt(4)) : [zero];
+  const divisions = peak >= BigInt(4) ? 4 : Number(peak);
+  const ticks = divisions === 0 ? [zero] : Array.from({ length: divisions + 1 }, (_, i) => peak * BigInt(divisions - i) / BigInt(divisions));
   const months = Array.from(new Set([0, Math.round(end / 4), Math.round(end / 2), Math.round(end * .75), end]));
   return (
     <figure className={styles.figure} aria-labelledby={id}>
@@ -88,7 +89,7 @@ export function BalanceFigure({ series, locale, money, currency, title }: {
         <>
           <div className={styles.chartBody}>
             <div className={styles.yAxis} aria-hidden="true">
-              {ticks.map((tick, i) => <span key={i}>{money(tick)}</span>)}
+              {ticks.map(tick => <span key={tick.toString()} style={{ top: `${y(tick) / 260 * 100}%` }}>{money(tick)}</span>)}
             </div>
             <svg className={styles.plot} viewBox="0 0 1000 260" preserveAspectRatio="none" aria-hidden="true"
               onPointerMove={event => {
@@ -174,7 +175,8 @@ export function CostFigure({ series, locale, money }: { series: PlotSeries[]; lo
             {rows.map(({ plan, label, values }, index) => (
               <div key={label}>
                 <h4>{label}</h4>
-                <p>{settled(plan) ? d.toPayoff : plan.costAccrued === null ? c[plan.status] : `${d.atHorizon} ${horizon(plan)}`}</p>
+                <p>{plan.status === "paid" ? d.toPayoff : plan.status === "no-debt" || plan.costAccrued === null
+                  ? c[plan.status] : `${d.atHorizon} ${horizon(plan)}`}</p>
                 <dl>
                   {[d.interest, d.fees, settled(plan) ? d.totalFinancialCost : d.allCosts].map((label, j) => (
                     <div key={label}>
@@ -253,8 +255,8 @@ export function ScenarioMetrics({ series, locale, money }: {
               <h4>{label}</h4>
               <dl>
                 <div>
-                  <dt>{plan.status === "paid" ? c.payoffTime : d.lastObserved}</dt>
-                  <dd>{elapsed ? `${elapsed} ${d.horizonUnit}` : "—"}</dd>
+                  <dt>{settled(plan) ? c.payoffTime : d.lastObserved}</dt>
+                  <dd>{plan.status === "no-debt" ? c["no-debt"] : elapsed ? `${elapsed} ${d.horizonUnit}` : "—"}</dd>
                   {elapsed > 0 && <div className={styles.miniTrack} aria-hidden="true">
                     <span className={plan.status === "paid" ? undefined : styles.incompleteBar}
                       style={{ width: `${elapsed / end * 100}%`, backgroundColor: colors[index] }} />
