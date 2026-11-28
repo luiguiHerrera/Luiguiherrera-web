@@ -35,6 +35,9 @@ export type DebtSummary = {
   minimumBasis: "calendar" | "declared" | "unknown";
   economicCapacity: "sufficient" | "insufficient" | "unknown";
   marginAfterMinimums: bigint | null;
+  minimumsLowerBound: bigint | null;
+  marginAfterMinimumsUpperBound: bigint | null;
+  minimumPaymentGapUpperBound: bigint | null;
   reservedMarginStatus: "compatible" | "deficit" | "unknown";
   emergencyReserveStatus: "limited" | "at-reference" | "unknown";
   minimumMarginStatus: "comfortable" | "tight" | "deficit" | "unknown";

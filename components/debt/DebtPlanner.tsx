@@ -114,14 +114,15 @@ function parsePlanner(
   const extraError = parsedExtras.some(({ amount, month }) => amount.error || month.error);
   const baseError = Boolean(parsedProfile.availableDebtPayment.error);
   const alternativeError = Boolean(parsedPayment.error) || rangeError || (paymentMode === "increase" && baseError);
+  const invalidSummaryInputs = { debts: debtError, ordinaryExpenses: Boolean(parsedProfile.fixedMonthlyExpenses.error) };
   const scenarioResults = {
-    current: calculateDebtPlan(profile, modelDebts, { invalidProjectionInput: debtError || baseError }),
+    current: calculateDebtPlan(profile, modelDebts, { invalidSummaryInputs, invalidProjectionInput: debtError || baseError }),
     monthlyOnly: paymentText.trim()
-      ? calculateDebtPlan(alternate, modelDebts, { invalidProjectionInput: debtError || alternativeError }) : null,
+      ? calculateDebtPlan(alternate, modelDebts, { invalidSummaryInputs, invalidProjectionInput: debtError || alternativeError }) : null,
     extrasOnly: modelExtras.length
-      ? calculateDebtPlan(profile, modelDebts, { extraContributions: modelExtras, invalidProjectionInput: debtError || extraError || baseError }) : null,
+      ? calculateDebtPlan(profile, modelDebts, { extraContributions: modelExtras, invalidSummaryInputs, invalidProjectionInput: debtError || extraError || baseError }) : null,
     combined: paymentText.trim() && modelExtras.length
-      ? calculateDebtPlan(alternate, modelDebts, { extraContributions: modelExtras, invalidProjectionInput: debtError || extraError || alternativeError }) : null,
+      ? calculateDebtPlan(alternate, modelDebts, { extraContributions: modelExtras, invalidSummaryInputs, invalidProjectionInput: debtError || extraError || alternativeError }) : null,
   };
   const hasInvalid = Object.values(parsedProfile).some(item => item.error) || debtError || extraError || alternativeError;
   return { parsedProfile, parsedDebts, parsedExtras, parsedPayment, rangeError, hasInvalid, profile, alternate, scenarioResults };
@@ -241,9 +242,13 @@ export function DebtPlanner({ locale }: { locale: Locale }) {
         <SectionHeading number="03" title={c.summary} />
         <div className="mt-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
           <Metric label={c.totalDebt} value={format(result.summary.totalDebt)} />
-          <Metric label={c.totalMinimum} value={format(result.summary.monthlyMinimums)} />
+          {result.summary.monthlyMinimums === null && (result.summary.minimumsLowerBound ?? 0) > 0 ? (
+            <Metric label={c.knownMinimums} value={`${c.atLeast} ${format(result.summary.minimumsLowerBound)}`} />
+          ) : <Metric label={c.totalMinimum} value={format(result.summary.monthlyMinimums)} />}
           <Metric label={c.cashBefore} value={format(result.summary.monthlyCashAfterExpenses)} />
-          <Metric label={c.minimumGap} value={format(result.summary.minimumPaymentGap)} />
+          {result.summary.minimumPaymentGap === null && (result.summary.minimumPaymentGapUpperBound ?? 0) < 0 ? (
+            <Metric label={c.maximumMinimumGap} value={format(result.summary.minimumPaymentGapUpperBound)} />
+          ) : <Metric label={c.minimumGap} value={format(result.summary.minimumPaymentGap)} />}
           <Metric label={c.debtToIncome} value={pct(result.summary.minimumsToIncome)} />
           <Metric label={c.plannedToIncome} value={pct(result.summary.plannedDebtToIncomeRatio)} />
           <Metric label={c.expensesToIncome} value={pct(result.summary.fixedAndMinimumsToIncome)} />

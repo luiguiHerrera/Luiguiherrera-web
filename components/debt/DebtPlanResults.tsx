@@ -40,6 +40,8 @@ function CashFlow({ flow, locale, money }: { flow: DebtCashFlowView; locale: Bud
 
 function HouseholdReading({ summary, locale, money }: { summary: DebtSummary; locale: BudgetLocale; money: Money }) {
   const c = debtCopy[locale];
+  const marginUpperBound = summary.marginAfterMinimumsUpperBound ?? BigInt(0);
+  const partialDeficit = summary.marginAfterMinimums === null && marginUpperBound < 0;
   const capacity = {
     sufficient: c.capacitySufficient, insufficient: c.capacityInsufficient, unknown: c.capacityUnknown,
   }[summary.economicCapacity];
@@ -59,7 +61,8 @@ function HouseholdReading({ summary, locale, money }: { summary: DebtSummary; lo
     <dl className="mt-3 grid gap-2 break-words text-sm leading-6 text-muted">
       <div>
         <dt className="font-semibold text-ink">{c.economicCapacity}</dt>
-        <dd>{capacity}</dd>
+        <dd>{partialDeficit ? <strong>{c.minimumCapacityShortfall} {money(-marginUpperBound)}.</strong> : capacity}</dd>
+        {partialDeficit && summary.monthlyCashAfterExpenses === null ? <dd className="text-xs">{c.unreportedExpensesNote}</dd> : null}
         <dd className="text-xs">{c.capacityBasis}</dd>
       </div>
       <div className={summary.reservedMarginStatus === "deficit" ? "border-l-2 border-brass/60 pl-3" : undefined}>
@@ -71,7 +74,9 @@ function HouseholdReading({ summary, locale, money }: { summary: DebtSummary; lo
         <dd>{reserve} {summary.emergencyFundMonths === null ? null : (
           <span>{c.coverage} · <strong>{formatDebtNumber(summary.emergencyFundMonths, locale)}</strong>.</span>
         )}</dd>
-        <dd>{c.marginAfterMinimums} · <strong>{money(summary.marginAfterMinimums)}</strong>. {protectionMargin}</dd>
+        <dd>{partialDeficit ? c.maximumMinimumMargin : c.marginAfterMinimums} · <strong>{
+          money(partialDeficit ? marginUpperBound : summary.marginAfterMinimums)
+        }</strong>. {protectionMargin}</dd>
       </div>
       {summary.minimumBasis === "declared" ? <div><dt className="sr-only">{c.minimumsSection}</dt><dd>{c.minimumBasisDeclared}</dd></div> : null}
     </dl>
@@ -114,13 +119,22 @@ export function ScenarioReading({ result, method, locale, money }: {
 }) {
   const c = debtCopy[locale];
   const assessment = result.assessments[method];
-  const minStatus = result.summary.payoffStatus;
+  const { summary } = result;
+  const minStatus = summary.payoffStatus;
+  const budgetGapUpperBound = summary.minimumPaymentGapUpperBound ?? BigInt(0);
+  const partialBudgetDeficit = summary.minimumPaymentGap === null && budgetGapUpperBound < 0;
+  const partialCapacityDeficit = summary.marginAfterMinimums === null && (summary.marginAfterMinimumsUpperBound ?? 0) < 0;
   return (
     <>
-      <HouseholdReading summary={result.summary} locale={locale} money={money} />
+      <HouseholdReading summary={summary} locale={locale} money={money} />
       <p className="mt-2 break-words text-sm leading-6 text-muted">
-        {c.ordinaryMinimumsInitial} · {minStatus === "incomplete" ? c.unknown : c[minStatus]} · {money(result.summary.minimumPaymentGap)}
+        {c.ordinaryMinimumsInitial} · {partialBudgetDeficit
+          ? <strong>{c.minimumBudgetShortfall} {money(-budgetGapUpperBound)}.</strong>
+          : <>{minStatus === "incomplete" ? c.unknown : c[minStatus]} · {money(summary.minimumPaymentGap)}</>}
       </p>
+      {partialBudgetDeficit || partialCapacityDeficit ? (
+        <p className="mt-1 text-xs leading-5 text-muted">{c.partialShortfallNote}</p>
+      ) : null}
       <CashFlow flow={assessment.initialCashFlow} locale={locale} money={money} />
       <PlanOutcome plan={result[method]} assessment={assessment} locale={locale} money={money} />
     </>

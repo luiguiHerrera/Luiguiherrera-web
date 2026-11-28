@@ -30,10 +30,25 @@ function termsFromDebt(d: DebtInput, order: number): AmortizableDebt | null {
   };
 }
 
-function declaredMinimum(d: DebtInput, terms: AmortizableDebt | null) {
-  if (d.minimumPayment === null || d.monthlyFee === null) return null;
-  if (!terms) return BigInt(d.minimumPayment) + (d.minimumIncludesFees ? zero : BigInt(d.monthlyFee));
-  return contractualMinimum(terms, terms.balance + monthlyInterest(terms.balance, terms.rate) + terms.fee);
+function firstMonthMinimum(debt: DebtInput, terms: AmortizableDebt | null) {
+  if (terms) {
+    const exact = contractualMinimum(terms, terms.balance + monthlyInterest(terms.balance, terms.rate) + terms.fee);
+    return { exact, lowerBound: exact };
+  }
+
+  // This is called only for a reported positive balance. Missing charges can add to the amount due.
+  const balance = BigInt(debt.balance!);
+  const knownFee = asMinor(debt.monthlyFee) ?? zero;
+  const knownInterest = debt.annualRate === null || debt.rateType === "unknown"
+    ? zero : monthlyInterest(balance, monthlyRate(debt.annualRate, debt.rateType));
+  const dueFloor = balance + knownInterest + knownFee;
+  const minimum = asMinor(debt.minimumPayment);
+  // A reported fee also bounds an omitted minimum that includes it, by the input validation rule.
+  const scheduledFloor = (minimum ?? zero) + (debt.minimumIncludesFees && minimum !== null ? zero : knownFee);
+  const lowerBound = scheduledFloor < dueFloor ? scheduledFloor : dueFloor;
+  const exact = minimum !== null && (debt.minimumIncludesFees || debt.monthlyFee !== null) && lowerBound === scheduledFloor
+    ? lowerBound : null;
+  return { exact, lowerBound };
 }
 
 function buildReferences(active: DebtInput[]): DebtReference[] {
@@ -52,6 +67,7 @@ function buildReferences(active: DebtInput[]): DebtReference[] {
 function summarize(
   profile: DebtProfileInput, totalDebt: bigint | null, monthlyMinimums: bigint | null,
   references: DebtReference[], minimumBasis: DebtSummary["minimumBasis"],
+  minimumsLowerBound: bigint | null, invalidExpenses = false,
 ): DebtSummary {
   const income = asMinor(profile.monthlyNetIncome);
   const expenses = asMinor(profile.fixedMonthlyExpenses);
@@ -63,9 +79,13 @@ function summarize(
   const minimumsToIncome = ratio(monthlyMinimums, income);
   const emergencyFundMonths = ratio(asMinor(profile.emergencyFund), obligations);
   const marginAfterMinimums = difference(monthlyCashAfterExpenses, monthlyMinimums);
-  const knownCapacityShortfall = (monthlyCashAfterExpenses ?? zero) < zero || (marginAfterMinimums ?? zero) < zero;
+  const marginAfterMinimumsUpperBound = income === null || invalidExpenses
+    ? null : income - (expenses ?? zero) - (minimumsLowerBound ?? zero);
+  const minimumPaymentGapUpperBound = difference(budget, minimumsLowerBound);
+  const knownCapacityShortfall = marginAfterMinimumsUpperBound !== null && marginAfterMinimumsUpperBound < zero;
   return {
     ordinaryBudget: budget, minimumBasis, marginAfterMinimums,
+    minimumsLowerBound, marginAfterMinimumsUpperBound, minimumPaymentGapUpperBound,
     economicCapacity: knownCapacityShortfall ? "insufficient" : marginAfterMinimums === null ? "unknown" : "sufficient",
     reservedMarginStatus: cashAfterDebtPlan === null ? "unknown" : cashAfterDebtPlan < zero ? "deficit" : "compatible",
     emergencyReserveStatus: emergencyFundMonths === null ? "unknown" : emergencyFundMonths < 3 ? "limited" : "at-reference",
@@ -77,8 +97,8 @@ function summarize(
     minimumsToIncome,
     fixedAndMinimumsToIncome: ratio(obligations, income),
     plannedDebtToIncomeRatio: ratio(budget, income),
-    payoffStatus: minimumPaymentGap === null ? "incomplete" :
-      minimumPaymentGap < zero ? "below-minimums" : minimumPaymentGap === zero ? "minimums-only" : "extra",
+    payoffStatus: (minimumPaymentGapUpperBound ?? zero) < zero ? "below-minimums" :
+      minimumPaymentGap === null ? "incomplete" : minimumPaymentGap === zero ? "minimums-only" : "extra",
     debtLoadStatus: minimumsToIncome === null ? "incomplete" :
       minimumsToIncome >= 0.6 ? "strong-alert" :
       minimumsToIncome > 0.5 ? "high-fragility" :
@@ -102,22 +122,31 @@ function withAssessment(summary: DebtSummary, references: DebtReference[], avala
 
 export function calculateDebtPlan(
   profile: DebtProfileInput, debts: DebtInput[], {
-    extraContributions = [], invalidProjectionInput = false,
-  }: { extraContributions?: ExtraContributionInput[]; invalidProjectionInput?: boolean } = {},
+    extraContributions = [], invalidProjectionInput = false, invalidSummaryInputs = {},
+  }: {
+    extraContributions?: ExtraContributionInput[];
+    invalidProjectionInput?: boolean;
+    invalidSummaryInputs?: { debts?: boolean; ordinaryExpenses?: boolean };
+  } = {},
 ): DebtPlanResult {
   const valid = validateDebtInputs(profile, debts, extraContributions);
   if (!valid) return withAssessment(
-    summarize({ availableDebtPayment: null, emergencyFund: null, fixedMonthlyExpenses: null, liquidNetWorth: null, monthlyNetIncome: null }, null, null, [], "unknown"),
+    summarize({ availableDebtPayment: null, emergencyFund: null, fixedMonthlyExpenses: null, liquidNetWorth: null, monthlyNetIncome: null }, null, null, [], "unknown", null),
     [], unavailablePlan("avalanche", "invalid-input", null, []), unavailablePlan("snowball", "invalid-input", null, []),
   );
 
   const totalDebt = knownSum(debts.map(d => asMinor(d.balance)));
   const active = debts.filter(d => d.balance !== null && d.balance > 0);
   const terms = active.map(termsFromDebt);
-  const monthlyMinimums = totalDebt === null ? null : knownSum(active.map((d, i) => declaredMinimum(d, terms[i])));
+  const minimums = active.map((debt, index) => firstMonthMinimum(debt, terms[index]));
+  const monthlyMinimums = totalDebt === null || invalidSummaryInputs.debts ? null : knownSum(minimums.map(value => value.exact));
+  // A debt with unreported balance could already be paid off, so its provable contribution is zero.
+  const minimumsLowerBound = invalidSummaryInputs.debts ? null : sum(minimums.map(value => value.lowerBound));
   const references = buildReferences(active);
   const minimumBasis = monthlyMinimums === null ? "unknown" : terms.some(term => term === null) ? "declared" : "calendar";
-  const summary = summarize(profile, totalDebt, monthlyMinimums, references, minimumBasis);
+  const summary = summarize(
+    profile, totalDebt, monthlyMinimums, references, minimumBasis, minimumsLowerBound, invalidSummaryInputs.ordinaryExpenses,
+  );
   const extras: ScheduledExtra[] = extraContributions.flatMap(e => (
     e.amount === null || e.monthNumber === null ? [] : [{ id: e.id, label: e.label, month: e.monthNumber, planned: BigInt(e.amount) }]
   ));

@@ -33,3 +33,28 @@ Las comparaciones mantienen las diferencias con signo de coste y plazo. Se limit
 | Diferencia entre rama predeterminada y despliegue | Cinco commits añadidos y cero divergentes |
 
 El candidato parte del commit publicado y añade exclusivamente las correcciones de Gestión de deudas y sus pruebas. Conserva el historial aprobado de Presupuesto, Diagnóstico y las demás secciones. Tras la aprobación expresa, se reconfirmarán la rama configurada para producción y los SHA del dominio, de la rama predeterminada y del candidato. Si la ascendencia se mantiene, se podrá adelantar la rama predeterminada al candidato sin forzar el historial. Se conservará el despliegue público de esta tabla como punto de recuperación. El cambio de la rama de producción y la publicación requieren aprobación.
+
+## H21-B · Obligaciones parcialmente conocidas
+
+| Caso | Candidato anterior | Corrección |
+| --- | --- | --- |
+| A · Ingreso de 2.000 €, gastos de 1.000 €, presupuesto de 500 €, mínimo de 1.500 € en la deuda A y mínimo sin informar en la B | Capacidad y cobertura desconocidas. | Mínimos de al menos 1.500 €, insuficiencia económica de al menos 500 € y presupuesto insuficiente en al menos 1.000 €. El total exacto y la cobertura del calendario siguen indeterminados. |
+| B · Ingreso de 2.000 €, gastos sin informar y mínimos exactos de 2.500 € | Capacidad desconocida. | Margen máximo de −500 € e insuficiencia económica de al menos 500 €. Los gastos ordinarios siguen sin informar. |
+| Saldo de 10 €, cuota de 1.500 € que incluye cargos, tasa o comisión desconocida | Con tasa desconocida y comisión declarada cero, la cuota se mostraba como si fuera el mínimo exigible. | El límite usa los 10 € más los cargos conocidos. Si se recuperan una tasa y una comisión de cero, el mínimo exigible exacto es 10 €. |
+
+El límite de cada deuda es el menor entre la cuota mínima defendible y el importe mínimo exigible al liquidarla. Un saldo desconocido puede corresponder a una deuda ya liquidada y aporta cero al límite, sin declararse como saldo cero. Una comisión conocida aporta al límite cuando aumenta la cuota o cuando la convención obliga a que la cuota que la incluye sea al menos igual a esa comisión. Los intereses conocidos se obtienen con la misma tasa mensual y el mismo redondeo del motor. Si los datos bastan para fijar la cuota mínima exacta del primer mes, el resumen la conserva aunque falten datos para simular el calendario.
+
+El margen máximo resta los gastos ordinarios conocidos y el límite inferior de los mínimos. Si los gastos se omitieron, se usa su límite inferior de cero exclusivamente para calcular esa cota. La brecha máxima del presupuesto resta el mismo límite de mínimos. Una cota negativa demuestra un faltante. Los importes exactos, los márgenes reservado y efectivo, la cobertura del calendario, la protección y el estado de liquidación se informan por separado.
+
+### Evidencia
+
+- `node --test lib/debt/*.test.ts` · 27 pruebas aprobadas, incluidas las 20 del candidato anterior y la referencia Python Decimal para 24 pares de caso y método.
+- 400 perfiles completos y 2.400 variantes con campos omitidos. Los límites inferiores quedaron dentro de sus valores exactos recuperados. Se verificaron 761 insuficiencias económicas y 730 presupuestarias frente a los datos recuperados.
+- Comparación exacta contra `68b2eb37999c945d1ce0588807645be5a4c37919` con la semilla `0x5acc2026` de la batería existente. Coincidieron 2.800 configuraciones, 5.600 planes completos y 615.887 periodos, incluidos movimientos y trazas de abonos.
+
+### Procedimiento de integración tras aprobación
+
+1. Verificar el candidato exacto, los dos SHA remotos y en Vercel el seguimiento de `main` con asignación automática de dominio. Confirmar que el candidato sigue siendo descendiente de ambos.
+2. Adelantar `vercel-deployment` al candidato mediante fast-forward. La rama predeterminada preserva así las versiones aprobadas de Presupuesto, Diagnóstico y Deudas.
+3. Adelantar `main` al mismo commit mediante fast-forward. Vercel construirá producción y reasignará el dominio cuando el despliegue esté listo. Detener la operación si cualquiera de las ramas ha divergido o si una protección de rama impide el avance esperado.
+4. Verificar el SHA del dominio y las rutas en español e inglés de Deudas, Presupuesto y Diagnóstico. El despliegue `dpl_7kcwRyoWiMNYJcR3Y5ARPpmwdDeu` es el punto de recuperación del dominio. Si hay que recuperarlo, se restaura en Vercel y se conserva el historial Git.
