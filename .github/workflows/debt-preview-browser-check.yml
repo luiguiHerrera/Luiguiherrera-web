@@ -1,0 +1,38 @@
+name: Debt preview browser qualification
+on:
+  push:
+    branches: [codex/debt-preview-browser-check-20261128]
+permissions:
+  contents: read
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      NEXT_TELEMETRY_DISABLED: "1"
+      DEBT_QA_ORIGIN: "http://127.0.0.1:4170"
+      DEBT_QA_HOME: ${{ runner.temp }}/debt-browser-qa
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: npm install --prefix "$DEBT_QA_HOME" --no-audit --no-fund playwright@1.62.0 lighthouse@12
+      - run: node "$DEBT_QA_HOME/node_modules/playwright/cli.js" install --with-deps chromium firefox webkit
+      - run: npm run build
+      - name: Exercise candidate in three browsers
+        run: |
+          npm run start -- --hostname 127.0.0.1 --port 4170 > "$DEBT_QA_HOME/site.log" 2>&1 &
+          trap 'cat "$DEBT_QA_HOME/site.log"; kill $! 2>/dev/null || true' EXIT
+          for n in $(seq 1 45); do
+            curl -fsS "$DEBT_QA_ORIGIN/deudas" -o /dev/null && break
+            sleep 2
+          done
+          node scripts/debt-preview-browser-check.mjs
+          export CHROME_PATH="$(node -e 'process.stdout.write(require(process.env.DEBT_QA_HOME + "/node_modules/playwright").chromium.executablePath())')"
+          node "$DEBT_QA_HOME/node_modules/lighthouse/cli/index.js" "$DEBT_QA_ORIGIN/deudas" --chrome-flags="--headless --no-sandbox" --output=json --output-path="$DEBT_QA_HOME/lighthouse.json" --only-categories=performance,accessibility --quiet
+          node -e 'const r=require(process.env.DEBT_QA_HOME+"/lighthouse.json"); console.log("Lighthouse",JSON.stringify({categories:Object.fromEntries(Object.values(r.categories).map(x=>[x.id,x.score])), LCP:r.audits["largest-contentful-paint"]?.numericValue, CLS:r.audits["cumulative-layout-shift"]?.numericValue, TBT:r.audits["total-blocking-time"]?.numericValue}));'
